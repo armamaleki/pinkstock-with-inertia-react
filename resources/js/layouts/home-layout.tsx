@@ -1,6 +1,7 @@
 import { type BreadcrumbItem } from '@/types';
 import { type ReactNode, useEffect } from 'react';
 import HomeHeader from '@/layouts/home/home-header';
+import HomeFooter from '@/layouts/home/home-footer';
 
 interface HomeLayoutProps {
     children: ReactNode;
@@ -19,9 +20,10 @@ export default function HomeLayout({ children, breadcrumbs, ...props }: HomeLayo
     }, []);
 
     return (
-        <section className="container mx-auto" {...props}>
+        <section className="container mx-auto space-y-4" {...props}>
             <HomeHeader />
             {children}
+            <HomeFooter/>
         </section>
     );
 }

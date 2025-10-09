@@ -47,7 +47,7 @@ export default function() {
                              </Link>
                              <Link
                                  className={`flex gap-1 items-center`}
-                                 href={'/product-categories'}>
+                                 href={'/product-category'}>
                                  <Grid2x2Plus className={`size-6`}/>
                                  دسته بندی محصولات
                              </Link>
@@ -90,7 +90,7 @@ export default function() {
                      </Link>
                      <Link
                          className={`flex flex-col items-center text-center w-full text-[10px] `}
-                         href={'/product-categories'}>
+                         href={'/product-category'}>
                          <Grid2x2Plus className={`size-8`}/>
                          <h3>دسته بندی ها</h3>
                      </Link>

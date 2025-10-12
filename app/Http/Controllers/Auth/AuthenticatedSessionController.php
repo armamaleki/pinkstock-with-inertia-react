@@ -4,13 +4,18 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Fortify\Features;
+use Spatie\Permission\Models\Role as ROL;
+use Illuminate\Support\Facades\Cache;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,23 +35,47 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $user = $request->validateCredentials();
+        $data = $request->validated();
+//        $otp = rand(10000, 99999);
+        $otp = 12345;
+        Cache::put('otp_' . $data['phone'], $otp, now()->addMinutes(2));
 
-        if (Features::enabled(Features::twoFactorAuthentication()) && $user->hasEnabledTwoFactorAuthentication()) {
-            $request->session()->put([
-                'login.id' => $user->getKey(),
-                'login.remember' => $request->boolean('remember'),
-            ]);
+        $user = User::firstOrCreate(
+            ['phone' => $data['phone']],
+            [
+                'name' => '',
+                'password' => Hash::make(Str::random(5)),
+            ]
+        );
 
-            return to_route('two-factor.login');
+        if (!$user->hasRole('user')) {
+            $role = ROL::where('name', 'user')->first();
+            if ($role) {
+                $user->assignRole($role);
+            }
         }
 
-        Auth::login($user, $request->boolean('remember'));
-
         $request->session()->regenerate();
+        return back()->with('otp_sent', true)->with('otp_code', $otp);
 
-        return redirect()->intended(route('dashboard', absolute: false));
     }
+
+    public function verify(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|digits:11|numeric|regex:/(09)[0-9]{9}/',
+            'otp' => 'required|numeric',
+        ]);
+        $cachedOtp = Cache::get('otp_' . $request->phone);
+        if (!$cachedOtp || $cachedOtp != $request->otp) {
+            return back()->withErrors(['otp' => 'کد وارد شده اشتباه است یا منقضی شده']);
+        }
+        $user = User::where('phone', $request->phone)->first();
+        Auth::login($user);
+        Cache::forget('otp_' . $request->phone);
+        return redirect()->route('dashboard')->with('success', 'با موفقیت وارد شدید');
+    }
+
 
     /**
      * Destroy an authenticated session.
@@ -54,10 +83,8 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/');
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
@@ -85,15 +86,22 @@ class CreateSuperUserAndPermission extends Seeder
             'training-video-update',
             'training-video-status',
         ];
-        $user = User::create([
-            'name' => 'ارما',
-            'phone' => '09125918435',
-            'email' => 'arma.malekii@gmail.com',
-            'password' => bcrypt('123456')
-        ]);
-        $role = Role::create(['name' => 'superUser']);
-        $permissions = Permission::pluck('id','id')->all();
-        $role->syncPermissions($permissions);
-        $user->assignRole([$role->id]);
+        foreach ($permissions as $permName) {
+            Permission::firstOrCreate(['name' => $permName]);
+        }
+        $role = Role::firstOrCreate(['name' => 'superUser']);
+        $allPermissions = Permission::pluck('id', 'id')->all();
+        $role->syncPermissions($allPermissions);
+        $user = User::firstOrCreate(
+            ['phone' => '09125918435'],
+            [
+                'name' => 'ارما',
+                'email' => 'arma.malekii@gmail.com',
+                'password' => Hash::make('123456'),
+            ]
+        );
+        if (!$user->hasRole('superUser')) {
+            $user->assignRole($role);
+        }
     }
 }

@@ -1,98 +1,188 @@
-import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
 import InputError from '@/components/input-error';
-import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
-import { Form, Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { useForm } from '@inertiajs/react';
+import { FormEvent, useEffect, useState } from 'react';
+import { login } from '@/routes';
+import { verify } from '@/routes/login';
 
 interface LoginProps {
-    status?: string;
-    canResetPassword: boolean;
+    otp_sent?: boolean;
+    otp_code?: string;
 }
+export default function Login({ otp_sent = false, otp_code }: LoginProps) {
+    const [showOtpForm, setShowOtpForm] = useState<boolean>(otp_sent);
+    const { props } = usePage();
+    const [timer, setTimer] = useState<number>(0);
 
-export default function Login({ status, canResetPassword }: LoginProps) {
+    const { data, setData, post, processing, errors, reset } = useForm<{
+        phone: string;
+        otp: string;
+    }>({
+        phone: '',
+        otp: '',
+    });
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (timer > 0) {
+            interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+        }
+        return () => clearInterval(interval);
+    }, [timer]);
+
+    const handleSendCode = (e: FormEvent) => {
+        e.preventDefault();
+        if (timer > 0) return;
+
+        post(login.url(), {
+            preserveScroll: true,
+            onSuccess: (res) => {
+                setShowOtpForm(true);
+                setTimer(120);
+                const otpFromFlash =
+                    (res?.props as any)?.flash?.otp_code ||
+                    (props?.flash as any)?.otp_code;
+
+                if (otpFromFlash) {
+                    console.log('OTP Code (for testing):', otpFromFlash);
+                }
+            },
+        });
+    };
+
+    const handleVerifyCode = (e: FormEvent) => {
+        e.preventDefault();
+        post(verify().url, {
+            preserveScroll: true,
+        });
+    };
+
     return (
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
-        >
-            <Head title="Log in" />
+            title="ورود و یا ثبت نام"
+            description="لطفا برای ورود و یا ثبت نام لطفا تلفن همراه خود را وارد کنید.">
+            <Head title="ورود|ثبت نام" />
 
-            <Form
-
-                resetOnSuccess={['password']}
-                className="flex flex-col gap-6"
-            >
-                {({ processing, errors }) => (
-                    <>
-                        <div className="grid gap-6">
+            <Card>
+                <CardContent>
+                    {!showOtpForm ? (
+                        <form
+                            onSubmit={handleSendCode}
+                            className="flex flex-col gap-6"
+                            dir="rtl"
+                        >
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="phone">تلفن همراه</Label>
                                 <Input
-                                    id="email"
-                                    type="email"
-                                    name="email"
+                                    id="phone"
+                                    type="tel"
+                                    name="phone"
+                                    placeholder="0912..."
+                                    value={data.phone}
+                                    onChange={(e) =>
+                                        setData('phone', e.target.value)
+                                    }
                                     required
                                     autoFocus
-                                    tabIndex={1}
-                                    autoComplete="email"
-                                    placeholder="email@example.com"
+                                    autoComplete="tel"
                                 />
-                                <InputError message={errors.email} />
-                            </div>
-
-                            <div className="grid gap-2">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
-                                </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Password"
-                                />
-                                <InputError message={errors.password} />
-                            </div>
-
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <InputError message={errors.phone} />
                             </div>
 
                             <Button
                                 type="submit"
-                                className="mt-4 w-full"
-                                tabIndex={4}
-                                disabled={processing}
-                                data-test="login-button"
+                                className="w-full relative"
+                                disabled={processing || timer > 0}
                             >
-                                {processing && (
+                                {processing ? (
                                     <LoaderCircle className="h-4 w-4 animate-spin" />
+                                ) : timer > 0 ? (
+                                    <>
+                                        ارسال مجدد تا{' '}
+                                        <span className="font-bold">
+                                        {timer}
+                                    </span>{' '}
+                                        ثانیه
+                                    </>
+                                ) : (
+                                    'ارسال کد ورود'
                                 )}
-                                Log in
                             </Button>
-                        </div>
+                        </form>
+                    ) : (
+                        <form
+                            onSubmit={handleVerifyCode}
+                            className="flex flex-col gap-6"
+                            dir="rtl"
+                        >
+                            <div className="grid gap-2">
+                                <Label htmlFor="otp">کد تایید</Label>
+                                <Input
+                                    id="otp"
+                                    type="text"
+                                    name="otp"
+                                    placeholder="کد ۵ رقمی"
+                                    value={data.otp}
+                                    onChange={(e) => setData('otp', e.target.value)}
+                                    required
+                                />
+                                <InputError message={errors.otp} />
+                            </div>
 
-                    </>
-                )}
-            </Form>
+                            <input type="hidden" name="phone" value={data.phone} />
 
-            {status && (
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                    {status}
-                </div>
-            )}
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                disabled={processing}
+                            >
+                                {processing ? (
+                                    <LoaderCircle className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    'ورود به حساب'
+                                )}
+                            </Button>
+
+                            <div className="flex justify-between items-center text-sm text-gray-600 mt-2">
+                                <button
+                                    type="button"
+                                    className="underline"
+                                    onClick={() => {
+                                        setShowOtpForm(false);
+                                        reset('otp');
+                                        setTimer(0);
+                                    }}
+                                >
+                                    تغییر شماره
+                                </button>
+
+                                {timer > 0 ? (
+                                    <span>
+                                    ارسال مجدد در{' '}
+                                        <span className="font-bold">{timer}</span>{' '}
+                                        ثانیه
+                                </span>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={handleSendCode}
+                                        className="text-blue-600 underline"
+                                    >
+                                        ارسال مجدد کد
+                                    </button>
+                                )}
+                            </div>
+                        </form>
+                    )}
+                </CardContent>
+            </Card>
         </AuthLayout>
     );
 }

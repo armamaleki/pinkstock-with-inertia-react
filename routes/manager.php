@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('manager')->as('manager.')->group(function () {
+Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-admin-panel'])->group(function () {
     Route::get('/', [\App\Http\Controllers\Manager\IndexController::class, 'index'])->name('index');
 
     Route::prefix('user')->as('user.')->group(function () {

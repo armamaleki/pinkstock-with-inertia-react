@@ -8,6 +8,12 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
 
     Route::prefix('user')->as('user.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\UserController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Manager\UserController::class, 'create'])->name('create');
+        Route::get('/{user}/show', [\App\Http\Controllers\Manager\UserController::class, 'show'])->name('show');
+        Route::post('/store', [\App\Http\Controllers\Manager\UserController::class, 'store'])->name('store');
+        Route::get('/{user}/edit', [\App\Http\Controllers\Manager\UserController::class, 'edit'])->name('edit');
+        Route::patch('/{user}/update', [\App\Http\Controllers\Manager\UserController::class, 'update'])->name('update');
+        Route::delete('/{user}/destroy', [\App\Http\Controllers\Manager\UserController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('role')->as('role.')->group(function () {

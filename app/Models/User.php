@@ -14,7 +14,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable , HasRoles;
+    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasRoles;
 
     /**
      * The attribute that are mass assignable.
@@ -61,7 +61,12 @@ class User extends Authenticatable
             ->nonQueued();
     }
 
-
+    protected static function booted()
+    {
+        static::addGlobalScope('latest', function ($query) {
+            $query->orderBy('created_at', 'desc');
+        });
+    }
 
     public function orders()
     {
@@ -77,6 +82,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Transaction::class);
     }
+
     public function scopeLatestUpdated($query)
     {
         return $query->orderBy('updated_at', 'desc');

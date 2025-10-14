@@ -1,7 +1,4 @@
-import { Form } from '@inertiajs/react';
-import { Input } from '@/components/ui/input';
-import InputError from '@/components/input-error';
-import { Button } from '@headlessui/react';
+import { Form, usePage } from '@inertiajs/react';
 import { LoaderCircle } from 'lucide-react';
 import {
     InputGroup,
@@ -9,43 +6,41 @@ import {
     InputGroupButton,
     InputGroupInput,
 } from '@/components/ui/input-group';
+import { RouteDefinition } from '@/wayfinder';
 
-// @ts-ignore
-export default function ManagerSearchBox({action}) {
+interface ManagerSearchBoxProps {
+    action?: RouteDefinition<"get">
+}
+export default function ManagerSearchBox({ action }:ManagerSearchBoxProps) {
+    const { url } = usePage();
+    const params = new URLSearchParams(url.split('?')[1]);
+    const q = params.get('q') || '';
     return(
         <Form
             method="post"
             action={action}
             resetOnSuccess={['title']} >
-            {({ processing, errors }) => (
+            {({ processing }) => (
                 <div className={`flex gap-1 w-fit items-center`}>
-                    <div className={`w-90 `}>
-                        <Input
-                            id="q"
-                            className={`bg-gray-900`}
-                            name="q"
-                            placeholder="جستجو.."
-                            required
-                        />
-                        <InputError message={errors.q} />
-                    </div>
-                    <Button
-                        type="submit"
-                        className="mt-2 bg-gray-900 w-fit p-2"
-                        disabled={processing}>
-                        {processing ? (
-                            <>
-                                <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                                درحال جستجو...
-                            </>
-                        ) : (
-                            'جستجو'
-                        )}
-                    </Button>
                     <InputGroup>
-                        <InputGroupInput placeholder="Type to search..." />
-                        <InputGroupAddon align="inline-end">
-                            <InputGroupButton variant="secondary">Search</InputGroupButton>
+                        <InputGroupInput
+                            name={'q'}
+                            defaultValue={q}
+                            placeholder="جستجو..." />
+                        <InputGroupAddon
+                            align="inline-end">
+                            <InputGroupButton
+                                disabled={processing}
+                                variant="ghost">
+                                {processing ? (
+                                    <>
+                                        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                                        درحال جستجو...
+                                    </>
+                                ) : (
+                                    'جستجو'
+                                )}
+                            </InputGroupButton>
                         </InputGroupAddon>
                     </InputGroup>
                 </div>

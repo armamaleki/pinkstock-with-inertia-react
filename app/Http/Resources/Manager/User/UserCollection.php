@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Manager\Role;
+namespace App\Http\Resources\Manager\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class RoleCollection extends ResourceCollection
+class UserCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -14,6 +14,6 @@ class RoleCollection extends ResourceCollection
      */
     public function toArray(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        return RoleResource::collection($this->collection);
+        return UserResource::collection($this->collection);
     }
 }

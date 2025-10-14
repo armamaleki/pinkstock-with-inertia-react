@@ -1,4 +1,7 @@
-import ManagerLayout from '@/layouts/manager-layout';
+import ManagerSearchBox from '@/components/manager-search-box';
+import Paginate from '@/components/paginate';
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import {
     Card,
     CardContent,
@@ -14,41 +17,113 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import ManagerSearchBox from '@/components/manager-search-box';
+} from '@/components/ui/table';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
+import ManagerLayout from '@/layouts/manager-layout';
 import user from '@/routes/manager/user';
+import { Link } from '@inertiajs/react';
+import { Eye, Pen, Plus } from 'lucide-react';
 
-export default function Manager() {
+interface User {
+    id: number;
+    name: string;
+    phone: string;
+    created: string;
+    userRole: string;
+}
+interface UserListResponse {
+    data: User[];
+}
+interface UserListProps {
+    usersList: UserListResponse;
+}
+export default function Manager({ usersList }: UserListProps) {
     return (
         <ManagerLayout>
             <Card className={'bg-gray-800 shadow shadow-pink-400'}>
-                <CardHeader className={`flex justify-between`}>
+                <CardHeader className="flex flex-row items-center justify-between p-2">
                     <CardTitle className={`w-fit`}>لیست کل کاربران</CardTitle>
-                    <ManagerSearchBox action={user.index()}/>
+                    <div
+                        className={`flex items-center gap-4 rounded-md bg-gray-900 p-2 shadow shadow-pink-400`}
+                    >
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button asChild>
+                                    <Link href={user.create()}>
+                                        <Plus />
+                                    </Link>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>اضافه کردن کاربر جدید</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <ManagerSearchBox action={user.index()} />
+                    </div>
                 </CardHeader>
                 <CardContent className={'bg-gray-900'}>
                     <Table>
-                        <TableCaption>A list of your recent invoices.</TableCaption>
+                        <TableCaption>
+                            A list of your recent invoices.
+                        </TableCaption>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-[100px]">Invoice</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Method</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
+                                <TableHead className="text-right">
+                                    نام کاربر
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    تلفن همراه
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    زمان ثبت نام
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    دسترسی
+                                </TableHead>
+                                <TableHead className="text-right">#</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow>
-                                <TableCell className="font-medium">INV001</TableCell>
-                                <TableCell>Paid</TableCell>
-                                <TableCell>Credit Card</TableCell>
-                                <TableCell className="text-right">$250.00</TableCell>
-                            </TableRow>
+                            {usersList.data.map((userItem, index) => (
+                                <TableRow key={index}>
+                                    <TableCell className="text-right">
+                                        {userItem?.name}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {userItem?.phone}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        {userItem?.created}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        قخمث
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <ButtonGroup>
+                                            <Button
+                                                asChild>
+                                                <Link href={user.show(userItem)}>
+                                                    <Eye />
+                                                </Link>
+                                            </Button>
+                                            <Button asChild>
+                                                <Link href={'/'}>
+                                                    <Pen />
+                                                </Link>
+                                            </Button>
+                                        </ButtonGroup>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </CardContent>
                 <CardFooter>
-                    اینجا صفحه بندی رو بزار
+                    <Paginate meta={usersList.meta} />
                 </CardFooter>
             </Card>
         </ManagerLayout>

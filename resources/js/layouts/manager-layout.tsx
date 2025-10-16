@@ -4,6 +4,7 @@ import type { BreadcrumbItem } from '@/types';
 import { type ReactNode, useEffect } from 'react';
 import { ToastContainer ,toast } from 'react-toastify';
 import { usePage } from '@inertiajs/react';
+import { Breadcrumbs } from '@/components/breadcrumbs';
 
 interface ManagerLayoutProps {
     children: ReactNode;
@@ -50,6 +51,8 @@ export default function ManagerLayout({
             <ToastContainer />
             <ManagerHeader />
             <section className="container mx-auto space-y-4" {...props}>
+                <Breadcrumbs breadcrumbs={breadcrumbs} />
+
                 {children}
             </section>
 

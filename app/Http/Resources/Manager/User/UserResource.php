@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'id' => $this->id ?? null,
             'name' => $this->name ?? null,
             'phone' => $this->phone ?? null,
-            'userRole' => $this->userRole ?? null,
+            'role' => $this->getRoleNames()->first() ?? null,
             'created' => $this->created_at ? $this->created_at->diffForHumans() : null,
         ];
 

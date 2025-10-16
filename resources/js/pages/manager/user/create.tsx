@@ -17,12 +17,28 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import { useState, FormEvent } from 'react';
+import type { BreadcrumbItem } from '@/types';
+import manager from '@/routes/manager';
 interface Role {
     name: string;
 }
 interface RolesList {
     data: Role[];
 }
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'مدیریت',
+        href: manager.index(),
+    },
+    {
+        title: 'کاربران',
+        href: user.index(),
+    },
+    {
+        title: 'اضافه کردن کاربر جدید',
+        href: user.create(),
+    },
+];
 export default function CreateUser({ rolesList }: { rolesList: RolesList }) {
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm({
         name: '',
@@ -53,7 +69,7 @@ export default function CreateUser({ rolesList }: { rolesList: RolesList }) {
     };
 
     return (
-        <ManagerLayout>
+        <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className="bg-gray-800">
                 <CardHeader>اضافه کردن کاربر جدید</CardHeader>
                 <CardContent>

@@ -23,7 +23,7 @@ export default function ManagerSidebar() {
         <>
             {menuOpen && (
                 <div
-                    className={'fixed top-4 right-4 h-4/5 w-80 space-y-4 overflow-auto rounded-xl bg-gray-800 p-4 shadow-lg shadow-pink-400'}>
+                    className={'fixed top-4 z-40 right-4 h-4/5 w-80 space-y-4 overflow-auto rounded-xl bg-gray-800 p-4 shadow-lg shadow-pink-400'}>
                     <div>
                         <Link
                             className={

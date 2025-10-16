@@ -9,20 +9,31 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
     Route::prefix('user')->as('user.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\UserController::class, 'index'])->name('index');
         Route::get('/create', [\App\Http\Controllers\Manager\UserController::class, 'create'])->name('create');
-        Route::get('/{user}/show', [\App\Http\Controllers\Manager\UserController::class, 'show'])->name('show');
         Route::post('/store', [\App\Http\Controllers\Manager\UserController::class, 'store'])->name('store');
+        Route::get('/{user}/show', [\App\Http\Controllers\Manager\UserController::class, 'show'])->name('show');
         Route::get('/{user}/edit', [\App\Http\Controllers\Manager\UserController::class, 'edit'])->name('edit');
         Route::patch('/{user}/update', [\App\Http\Controllers\Manager\UserController::class, 'update'])->name('update');
-        Route::delete('/{user}/destroy', [\App\Http\Controllers\Manager\UserController::class, 'destroy'])->name('destroy');
+//        Route::delete('/{user}/destroy', [\App\Http\Controllers\Manager\UserController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('role')->as('role.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\RoleController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Manager\RoleController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Manager\RoleController::class, 'store'])->name('store');
+        Route::get('/{role}/show', [\App\Http\Controllers\Manager\RoleController::class, 'show'])->name('show');
+        Route::get('/{role}/edit', [\App\Http\Controllers\Manager\RoleController::class, 'edit'])->name('edit');
+        Route::patch('/{role}/update', [\App\Http\Controllers\Manager\RoleController::class, 'update'])->name('update');
     });
 
     Route::prefix('article')->as('article.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\ArticleController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Manager\ArticleController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Manager\ArticleController::class, 'store'])->name('store');
+        Route::get('/{article}/show', [\App\Http\Controllers\Manager\ArticleController::class, 'show'])->name('show');
+        Route::get('/{article}/edit', [\App\Http\Controllers\Manager\ArticleController::class, 'edit'])->name('edit');
+        Route::patch('/{article}/update', [\App\Http\Controllers\Manager\ArticleController::class, 'update'])->name('update');
     });
+
     Route::prefix('comment')->as('comment.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\CommentController::class, 'index'])->name('index');
     });

@@ -27,6 +27,8 @@ import ManagerLayout from '@/layouts/manager-layout';
 import user from '@/routes/manager/user';
 import { Link } from '@inertiajs/react';
 import { Eye, Pen, Plus } from 'lucide-react';
+import type { BreadcrumbItem } from '@/types';
+import manager from '@/routes/manager';
 
 interface User {
     id: number;
@@ -41,9 +43,19 @@ interface UserListResponse {
 interface UserListProps {
     usersList: UserListResponse;
 }
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'مدیریت',
+        href: manager.index(),
+    },
+    {
+        title: 'کاربران',
+        href: user.index(),
+    },
+];
 export default function Manager({ usersList }: UserListProps) {
     return (
-        <ManagerLayout>
+        <ManagerLayout breadcrumbs={breadcrumbs} >
             <Card className={'bg-gray-800 shadow shadow-pink-400'}>
                 <CardHeader className="flex flex-row items-center justify-between p-2">
                     <CardTitle className={`w-fit`}>لیست کل کاربران</CardTitle>
@@ -111,7 +123,7 @@ export default function Manager({ usersList }: UserListProps) {
                                                 </Link>
                                             </Button>
                                             <Button asChild>
-                                                <Link href={'/'}>
+                                                <Link href={user.edit(userItem)}>
                                                     <Pen />
                                                 </Link>
                                             </Button>

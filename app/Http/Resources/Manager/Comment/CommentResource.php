@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Manager\Comment;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,12 @@ class CommentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return[
+          'id'=>$this->id,
+          'body'=>$this->body ?? null,
+          'user'=>$this->user->name ?? 'کاربر',
+          'status'=>$this->status ?? null  ,
+          'created'=>Carbon::create($this->created_at)->ago() ?? 'چند لحظه پیش'  ,
+        ];
     }
 }

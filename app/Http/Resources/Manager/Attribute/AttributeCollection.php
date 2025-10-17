@@ -10,10 +10,10 @@ class AttributeCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @return array<int|string, mixed>
-     */
-    public function toArray(Request $request): array
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+ */
+    public function toArray(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        return parent::toArray($request);
+        return AttributeResource::collection($this->collection);
     }
 }

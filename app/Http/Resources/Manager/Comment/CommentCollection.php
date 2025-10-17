@@ -10,10 +10,10 @@ class CommentCollection extends ResourceCollection
     /**
      * Transform the resource collection into an array.
      *
-     * @return array<int|string, mixed>
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request): \Illuminate\Http\Resources\Json\AnonymousResourceCollection
     {
-        return parent::toArray($request);
+        return CommentResource::collection($this->collection);
     }
 }

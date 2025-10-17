@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attribute_id')->constrained('attributes')->onDelete('cascade');
-            $table->string('value')->nullable();
-            $table->unsignedInteger('sort_order')->default(0);
+            $table->string('name')->nullable()->unique();
+            $table->text('icon')->nullable();
+            $table->foreignId('user_id')->nullable()->index();
             $table->softDeletes();
             $table->timestamps();
         });

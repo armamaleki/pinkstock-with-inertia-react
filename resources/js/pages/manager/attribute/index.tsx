@@ -30,12 +30,12 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 export default function AttributeList({attributeLists}) {
-    console.log(attributeLists);
+    // console.log(attributeLists);
     return(
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className={'bg-gray-800 shadow shadow-pink-400'}>
                 <CardHeader className="flex flex-row items-center justify-between p-2">
-                    <CardTitle className={`w-fit`}>لیست کامنت ها</CardTitle>
+                    <CardTitle className={`w-fit`}>لیست ویژگی ها</CardTitle>
                     <div
                         className={`flex items-center gap-4 rounded-md bg-gray-900 p-2 shadow shadow-pink-400`}
                     >

@@ -46,6 +46,16 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::get('/{attribute}/edit', [\App\Http\Controllers\Manager\AttributeController::class, 'edit'])->name('edit');
         Route::patch('/{attribute}/update', [\App\Http\Controllers\Manager\AttributeController::class, 'update'])->name('update');
     });
+
+    Route::prefix('value')->as('value.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Manager\ValueController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Manager\ValueController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Manager\ValueController::class, 'store'])->name('store');
+        Route::get('/{value}/show', [\App\Http\Controllers\Manager\ValueController::class, 'show'])->name('show');
+        Route::get('/{value}/edit', [\App\Http\Controllers\Manager\ValueController::class, 'edit'])->name('edit');
+        Route::patch('/{value}/update', [\App\Http\Controllers\Manager\ValueController::class, 'update'])->name('update');
+    });
+
     Route::prefix('product')->as('product.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\ProductController::class, 'index'])->name('index');
     });

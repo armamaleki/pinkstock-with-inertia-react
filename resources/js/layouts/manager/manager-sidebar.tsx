@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import manager from '@/routes/manager';
+import value from '@/routes/manager/value';
 
 export default function ManagerSidebar() {
     const [menuOpen, setMenuOpen] = useState(false)
@@ -104,7 +105,7 @@ export default function ManagerSidebar() {
                                 className={
                                     'flex items-center gap-1 border-b border-pink-400 p-2'
                                 }
-                                href={``}>
+                                href={value.index()}>
                                 <ChartCandlestick />
                                 مقدار های ویژگی
                             </Link>

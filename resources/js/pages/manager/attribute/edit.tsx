@@ -20,17 +20,18 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: attribute.index(),
     },
     {
-        title: 'اضافه کردن ویژگی',
+        title: 'ویرایش ویژگی',
         href: '#',
     },
 ];
-export default function create() {
+export default function edit({attributeItem}) {
+
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
-    const { data, setData, post, processing, errors, reset, clearErrors } =
+    const { data, setData, patch, processing, errors, reset, clearErrors } =
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useForm({
-            name: '',
-            icon: '',
+            name: attributeItem.data.name || '',
+            icon: attributeItem.data.icon || '',
         });
     const newErrors: Record<string, string> = {};
     const  handleSubmit = (e)=>{
@@ -48,7 +49,7 @@ export default function create() {
             return;
         }
         // @ts-ignore
-        post(attribute.store(), {
+        patch(attribute.update(attributeItem.data.id), {
             onSuccess: () => reset('name', 'icon'),
         });
     }

@@ -13,10 +13,12 @@ import comment from '@/routes/manager/comment';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
-import { Eye, Plus } from 'lucide-react';
+import { Eye, Pen, Plus } from 'lucide-react';
 import Paginate from '@/components/paginate';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import attribute from '@/routes/manager/attribute';
+import article from '@/routes/manager/article';
+import { ButtonGroup } from '@/components/ui/button-group';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'مدیریت',
@@ -60,17 +62,12 @@ export default function AttributeList({attributeLists}) {
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="text-right">
-                                    کاربر
+                                    نام ویژگی
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    متن نظر
+                                    ایکون ویژگی
                                 </TableHead>
-                                <TableHead className="text-right">
-                                    وضعیت
-                                </TableHead>
-                                <TableHead className="text-right">
-                                    زمان ایجاد
-                                </TableHead>
+
                                 <TableHead className="text-right">#</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -78,24 +75,25 @@ export default function AttributeList({attributeLists}) {
                             {attributeLists.data.map((commentItem, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="text-right">
-                                        {commentItem?.user}
+                                        {commentItem?.name}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {commentItem?.body}
+                                        <div dangerouslySetInnerHTML={{ __html: commentItem.icon }} />
                                     </TableCell>
-                                    <TableCell className="text-right">
-                                        {commentItem?.status}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        {commentItem?.created}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <Button
-                                            asChild>
-                                            <Link href={comment.show(commentItem.id)}>
-                                                <Eye />
-                                            </Link>
-                                        </Button>
+                                    <TableCell>
+                                        <ButtonGroup>
+                                            <Button
+                                                asChild>
+                                                <Link href={attribute.show(commentItem.id)}>
+                                                    <Eye />
+                                                </Link>
+                                            </Button>
+                                            <Button asChild>
+                                                <Link href={attribute.edit(commentItem.id)}>
+                                                    <Pen />
+                                                </Link>
+                                            </Button>
+                                        </ButtonGroup>
                                     </TableCell>
                                 </TableRow>
                             ))}

@@ -28,7 +28,6 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 export default function AttributeList({valueLists}) {
-    // console.log(attributeLists);
     return(
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className={'bg-gray-800 shadow shadow-pink-400'}>
@@ -73,7 +72,7 @@ export default function AttributeList({valueLists}) {
                             {valueLists.data.map((valueItem, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="text-right">
-                                        {valueItem?.name}
+                                        {valueItem?.value}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         {valueItem?.attribute}

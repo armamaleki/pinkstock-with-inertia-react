@@ -20,18 +20,18 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: value.index(),
     },
     {
-        title: 'اضافه کردن مقدار',
+        title: 'ویرایش کردن مقدار',
         href: '#',
     },
 ];
-export default function create({attributeLists}) {
-    // console.log(attributeLists);
+export default function edit({attributeLists , valueItem}) {
+
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
     const { data, setData, post, processing, errors, reset, clearErrors } =
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useForm({
-            value: '',
-            attribute_id: null,
+            value: valueItem.data.value || '',
+            attribute_id: valueItem.data.attribute_id || null,
         });
     const newErrors: Record<string, string> = {};
     const  handleSubmit = (e)=>{

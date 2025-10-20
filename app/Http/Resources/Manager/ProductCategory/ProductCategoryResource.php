@@ -14,6 +14,20 @@ class ProductCategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'=>$this->id,
+            'avatar' => $this->getMedia('avatars')->isNotEmpty()
+                ? $this->getMedia('avatars')->first()->getFullUrl('watermark')
+                : null,
+            'name'=>$this->name ?? null,
+            'slug'=>$this->slug ?? null,
+            'status'=>$this->status ?? null,
+            'parent_id'=>$this->parent_id ?? null,
+            'meta_title'=>$this->meta_title ?? null,
+            'meta_description'=>$this->meta_description ?? null,
+            'description'=>$this->description ?? null,
+            'short_description'=>$this->short_description ?? null,
+            'user'=>$this->user->name ?? 'مدیر سایت',
+        ];
     }
 }

@@ -65,6 +65,11 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
 
     Route::prefix('product-category')->as('product-category.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'store'])->name('store');
+        Route::get('/{productCategory}/show', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'show'])->name('show');
+        Route::get('/{productCategory}/edit', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'edit'])->name('edit');
+        Route::patch('/{productCategory}/update', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'update'])->name('update');
     });
 
     Route::prefix('pink-academy')->as('pink-academy.')->group(function () {

@@ -1,6 +1,9 @@
-import ManagerLayout from '@/layouts/manager-layout';
-import type { BreadcrumbItem } from '@/types';
-import manager from '@/routes/manager';
+import ManagerSearchBox from '@/components/manager-search-box';
+import Paginate from '@/components/paginate';
+import StatusSwitch from '@/components/status-switch';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { ButtonGroup } from '@/components/ui/button-group';
 import {
     Card,
     CardContent,
@@ -9,19 +12,26 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import {
     Tooltip,
     TooltipContent,
     TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { Button } from '@/components/ui/button';
+import ManagerLayout from '@/layouts/manager-layout';
+import manager from '@/routes/manager';
+import article from '@/routes/manager/article';
+import type { BreadcrumbItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { Eye, Pen, Plus } from 'lucide-react';
-import ManagerSearchBox from '@/components/manager-search-box';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ButtonGroup } from '@/components/ui/button-group';
-import Paginate from '@/components/paginate';
-import article from '@/routes/manager/article';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'مدیریت',
@@ -32,8 +42,8 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '#',
     },
 ];
-export default function Manager({articleList}) {
-    return(
+export default function Manager({ articleList }) {
+    return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className={'bg-gray-800 shadow shadow-pink-400'}>
                 <CardHeader className="flex flex-row items-center justify-between p-2">
@@ -88,8 +98,10 @@ export default function Manager({articleList}) {
                             {articleList.data.map((articleItem, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="text-right">
-                                        <Avatar >
-                                            <AvatarImage src={articleItem.avatar} />
+                                        <Avatar>
+                                            <AvatarImage
+                                                src={articleItem.avatar}
+                                            />
                                             <AvatarFallback>NO</AvatarFallback>
                                         </Avatar>
                                     </TableCell>
@@ -97,7 +109,10 @@ export default function Manager({articleList}) {
                                         {articleItem?.name}
                                     </TableCell>
                                     <TableCell className="text-right">
-                                        {articleItem?.status}
+                                        <StatusSwitch
+                                            status={articleItem?.status}
+                                            link={article.status(articleItem?.slug)}
+                                        />
                                     </TableCell>
                                     <TableCell className="text-right">
                                         {articleItem?.creator}
@@ -111,14 +126,21 @@ export default function Manager({articleList}) {
 
                                     <TableCell className="text-right">
                                         <ButtonGroup>
-                                            <Button
-                                                asChild>
-                                                <Link href={article.show(articleItem.slug)}>
+                                            <Button asChild>
+                                                <Link
+                                                    href={article.show(
+                                                        articleItem.slug,
+                                                    )}
+                                                >
                                                     <Eye />
                                                 </Link>
                                             </Button>
                                             <Button asChild>
-                                                <Link href={article.edit(articleItem.slug)}>
+                                                <Link
+                                                    href={article.edit(
+                                                        articleItem.slug,
+                                                    )}
+                                                >
                                                     <Pen />
                                                 </Link>
                                             </Button>
@@ -134,5 +156,5 @@ export default function Manager({articleList}) {
                 </CardFooter>
             </Card>
         </ManagerLayout>
-    )
+    );
 }

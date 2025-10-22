@@ -61,4 +61,24 @@ class ArticleController extends Controller
     }
 
 
+    public function status(Request $request, Article $article)
+    {
+        // اعتبارسنجی ورودی
+        $request->validate([
+            'status' => 'required|in:active,check,deactivate',
+        ]);
+
+        try {
+            $article->update([
+                'status' => $request->status,
+            ]);
+
+            return back()->with('success', 'وضعیت مقاله با موفقیت تغییر کرد.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'تغییر وضعیت مقاله با خطا مواجه شد!');
+        }
+    }
+
+
+
 }

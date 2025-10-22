@@ -1,15 +1,15 @@
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import ManagerLayout from '@/layouts/manager-layout';
 import manager from '@/routes/manager';
-import article from '@/routes/manager/article';
 import type { BreadcrumbItem } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { FormEvent, useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import InputError from '@/components/input-error';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
+import { useState } from 'react';
+import Select from 'react-select';
 import CkEditor from '@/components/CkEditor';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -18,35 +18,37 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: manager.index(),
     },
     {
-        title: 'مقالات',
-        href: article.index(),
+        title: 'دسته بندی محصولات',
+        href: manager.productCategory.index(),
     },
     {
-        title: 'اضافه کردن مقاله جدید',
+        title: 'اضافه کردن دسته بندی',
         href: '#',
     },
 ];
-export default function CreateArticle() {
-    const { data, setData, post, processing, errors, reset, clearErrors } =
-        useForm({
-            name: '',
-            slug: '',
-            meta_title: '',
-            meta_description: '',
-            short_description: '',
-            description: '',
-        });
+
+export default function edit({ productCategoriesLists , productCategoryItem }) {
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const { data, setData, patch, processing, errors, reset, clearErrors } =
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useForm({
+            name: productCategoryItem.data.name || '',
+            slug: productCategoryItem.data.slug || '',
+            parent_id: productCategoryItem.data.parent_id || '',
+            meta_title: productCategoryItem.data.meta_title || '',
+            meta_description: productCategoryItem.data.meta_description || '',
+            short_description: productCategoryItem.data.short_description || '',
+            description: productCategoryItem.data.description || '',
+        });
+    const newErrors: Record<string, string> = {};
+    const handleSubmit = (e) => {
         e.preventDefault();
         setLocalErrors({});
         clearErrors();
-        const newErrors: Record<string, string> = {};
-
         if (!data.name) {
-            newErrors.name = 'نام مقاله الزامی است';
+            newErrors.name = 'نام دسته‌بندی الزامی است';
         } else if (data.name.length > 250) {
-            newErrors.name = 'نام مقاله نباید بیشتر از ۲۵۰ کاراکتر باشد';
+            newErrors.name = 'نام دسته‌بندی نباید بیشتر از ۲۵۰ کاراکتر باشد';
         }
 
         if (!data.slug) {
@@ -80,8 +82,8 @@ export default function CreateArticle() {
                 'توضیح کوتاه نباید بیشتر از 155 کاراکتر باشد';
         }
 
-        if (!data.description) {
-            newErrors.description = 'توضیحات الزامیه ';
+        if(!data.description){
+            newErrors.description = 'توضیحات الزامیه '
         }
 
         if (Object.keys(newErrors).length > 0) {
@@ -89,19 +91,23 @@ export default function CreateArticle() {
             return;
         }
         // @ts-ignore
-        post(article.store(), {
-            onSuccess: () => reset('name', 'phone', 'role'),
+        patch(manager.productCategory.update(productCategoryItem.data.slug), {
+            onSuccess: () => reset(),
         });
     };
 
+    const categoryOptions = productCategoriesLists.data.map((category) => ({
+        value: category.id,
+        label: category.name,
+    }));
     return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className="bg-gray-800">
-                <CardHeader>اضافه کردن مقاله جدید</CardHeader>
+                <CardHeader>اضافه کردن مقدار جدید</CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
-                            <Label htmlFor="name">نام مقاله</Label>
+                            <Label htmlFor="name">نام دسته بندی</Label>
                             <div className="col-span-1 md:col-span-3">
                                 <Input
                                     name="name"
@@ -111,7 +117,7 @@ export default function CreateArticle() {
                                         setData('name', e.target.value)
                                     }
                                     type="text"
-                                    placeholder="[کلید اصلی موضوع] + [وعده یا مزیت اصلی] + [نوع محتوا یا زاویه نگاه] + (اختیاری: عدد یا کلمه جادویی){اجباری}"
+                                    placeholder=" به طور مثال : کارت گرافیک {اجباری و منحصر به فرد باشه بین دسته بندی ها نهایتا 250 کارکتر قبوله}"
                                 />
                                 <InputError
                                     message={errors.name || localErrors.name}
@@ -119,7 +125,7 @@ export default function CreateArticle() {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
-                            <Label htmlFor="slug">آدرس اینترنتی</Label>
+                            <Label htmlFor="slug">آدرس اینترنتی دست بندی</Label>
                             <div className="col-span-1 md:col-span-3">
                                 <Input
                                     name="slug"
@@ -129,14 +135,41 @@ export default function CreateArticle() {
                                         setData('slug', e.target.value)
                                     }
                                     type="text"
-                                    placeholder="فقط انگلیسی وارد کنید (تیتر را به انگلیسی ترجمه کنید){اجباری}"
+                                    placeholder=" به طور مثال : کارت گرافیک {اجباری و منحصر به فرد باشه بین دسته بندی ها نهایتا 250 کارکتر قبوله}"
                                 />
                                 <InputError
                                     message={errors.slug || localErrors.slug}
                                 />
                             </div>
                         </div>
-
+                        <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
+                            <Label htmlFor="slug">
+                                دسته بندی والد (اجباری نیست)
+                            </Label>
+                            <div className="col-span-1 md:col-span-3">
+                                <Select
+                                    id="parent_id"
+                                    placeholder="یک دسته بندی را انتخاب کنید..."
+                                    options={categoryOptions}
+                                    value={categoryOptions.find(
+                                        (opt) => opt.value === data.parent_id,
+                                    )}
+                                    onChange={(selected) =>
+                                        setData(
+                                            'parent_id',
+                                            selected ? selected.value : null,
+                                        )
+                                    }
+                                    className="text-black"
+                                />
+                                <InputError
+                                    message={
+                                        errors.parent_id ||
+                                        localErrors.parent_id
+                                    }
+                                />
+                            </div>
+                        </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="meta_title">تیتر متا</Label>
                             <div className="col-span-1 md:col-span-3">
@@ -148,7 +181,7 @@ export default function CreateArticle() {
                                         setData('meta_title', e.target.value)
                                     }
                                     type="text"
-                                    placeholder="[کلمه کلیدی اصلی] + [مزیت/نتیجه جذاب]"
+                                    placeholder="[کلمه کلیدی اصلی] + [مزیت یا نتیجه] + [کلمه احساسی/تحریکی] {اجباری بین 50 تا 65 کارکتر}"
                                 />
                                 <InputError
                                     message={
@@ -159,11 +192,14 @@ export default function CreateArticle() {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
-                            <Label htmlFor="meta_description">توضیح متا </Label>
+                            <Label htmlFor="meta_description">
+                                توضیحات متا
+                            </Label>
                             <div className="col-span-1 md:col-span-3">
                                 <Textarea
                                     name="meta_description"
                                     id="meta_description"
+                                    className={'bg-gray-800'}
                                     value={data.meta_description}
                                     onChange={(e) =>
                                         setData(
@@ -171,7 +207,7 @@ export default function CreateArticle() {
                                             e.target.value,
                                         )
                                     }
-                                    placeholder="[موضوع اصلی] + [مزیت یا نتیجه برای کاربر] + [دعوت به اقدام یا جذابیت]"
+                                    placeholder="[کلمه کلیدی اصلی] + [توضیح ساده از محتوا یا مزیت] + [نتیجه یا فایده برای کاربر] + [دعوت به اقدام (CTA)] {اجباری بین 120 تا 150 کارکتر}"
                                 />
                                 <InputError
                                     message={
@@ -183,12 +219,13 @@ export default function CreateArticle() {
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="short_description">
-                                توضیح کوتاه
+                                توضیحات کوتاه
                             </Label>
                             <div className="col-span-1 md:col-span-3">
                                 <Textarea
                                     name="short_description"
                                     id="short_description"
+                                    className={'bg-gray-800'}
                                     value={data.short_description}
                                     onChange={(e) =>
                                         setData(
@@ -196,7 +233,7 @@ export default function CreateArticle() {
                                             e.target.value,
                                         )
                                     }
-                                    placeholder="[موضوع اصلی] + [مزیت یا نتیجه برای کاربر] + [دعوت به اقدام یا جذابیت]"
+                                    placeholder="[کلمه کلیدی اصلی] + [توضیح فایده یا کاربرد محتوا] + [نتیجه یا حس مثبت کاربر] {اجباری نهایتا 250 کارکتر}"
                                 />
                                 <InputError
                                     message={
@@ -207,20 +244,22 @@ export default function CreateArticle() {
                             </div>
                         </div>
                         <div>
-                            <Label htmlFor="message">متن مقاله</Label>
-                            <InputError
-                                message={
-                                    errors.description ||
-                                    localErrors.description
-                                }
-                            />
+                            <Label htmlFor="message">
+                                توضیحات دسته بندی
+                                <InputError
+                                    message={
+                                        errors.description ||
+                                        localErrors.description
+                                    }
+                                />
+                            </Label>
                             <CkEditor
                                 value={data.description}
                                 onChange={(value) =>
                                     setData('description', value)
                                 }
                             />
-
+                            <InputError message={errors.description} />
                         </div>
                         <Button
                             type="submit"

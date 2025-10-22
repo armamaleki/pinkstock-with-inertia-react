@@ -90,7 +90,7 @@ export default function Manager({productCategoriesLists}) {
                                                 </Link>
                                             </Button>
                                             <Button asChild>
-                                                <Link href={manager.productCategory.edit(categoryItem.id)}>
+                                                <Link href={manager.productCategory.edit(categoryItem.slug)}>
                                                     <Pen />
                                                 </Link>
                                             </Button>

@@ -32,6 +32,7 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::get('/{article}/show', [\App\Http\Controllers\Manager\ArticleController::class, 'show'])->name('show');
         Route::get('/{article}/edit', [\App\Http\Controllers\Manager\ArticleController::class, 'edit'])->name('edit');
         Route::patch('/{article}/update', [\App\Http\Controllers\Manager\ArticleController::class, 'update'])->name('update');
+        Route::patch('/{article}/status' , [\App\Http\Controllers\Manager\ArticleController::class, 'status'])->name('status');
     });
 
     Route::prefix('comment')->as('comment.')->group(function () {

@@ -11,7 +11,7 @@ class UpdateProductCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateProductCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:250|unique:product_categories,name,'.$this->productCategory->id,
+            'slug' => 'required|string|max:250|unique:product_categories,slug,'.$this->productCategory->id,
+            'parent_id' => 'nullable|integer|exists:product_categories,id',
+            'meta_title' => 'required|string|min:50|max:65',
+            'meta_description' => 'required|string|min:120|max:155',
+            'short_description' => 'required|string|max:250',
+            'description' => 'required|string',
         ];
     }
 }

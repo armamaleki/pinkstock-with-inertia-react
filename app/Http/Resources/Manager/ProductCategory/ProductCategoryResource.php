@@ -27,7 +27,7 @@ class ProductCategoryResource extends JsonResource
             'meta_description'=>$this->meta_description ?? null,
             'description'=>$this->description ?? null,
             'short_description'=>$this->short_description ?? null,
-            'user'=>$this->user->name ?? 'مدیر سایت',
+            'creator'=>$this->user->name ?? 'مدیر سایت',
         ];
     }
 }

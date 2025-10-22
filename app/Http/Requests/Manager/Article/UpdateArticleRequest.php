@@ -11,7 +11,7 @@ class UpdateArticleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,12 @@ class UpdateArticleRequest extends FormRequest
     public function rules(): array
     {
         return [
+            "name" => 'required|string|max:255',
             "slug" => 'required|max:255|unique:articles,slug,'.$this->article->id,
+            'meta_title' => 'required|string|min:50|max:65',
+            'meta_description' => 'required|string|min:120|max:155',
+            'short_description' => 'required|string|max:250',
+            'description' => 'required|string',
         ];
     }
 }

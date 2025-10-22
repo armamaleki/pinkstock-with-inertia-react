@@ -1,106 +1,164 @@
-import React, { useState, useCallback } from "react";
-import Cropper, { Area } from "react-easy-crop";
+import { useCallback, useState } from 'react';
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import Cropper from 'react-easy-crop';
+import { Cloud } from 'lucide-react';
+import { router } from '@inertiajs/react';
 
-interface ImageCropperProps {
-    aspect?: number;
-    url?: string;
-    onSuccess?: (file: File) => void; // ✅ فایل واقعی برگردونده میشه
-}
-
-export default function ImageCropper({ aspect = 16 / 9, url, onSuccess }: ImageCropperProps) {
-    const [image, setImage] = useState<string | null>(url || null);
+export default function ImageCropper({
+                                         url = "",
+                                         onSuccess,
+                                         aspect = 1,
+                                         text = 'آپلود اواتار'
+                                     }) {
+    const [image, setImage] = useState(null);
+    const [fileName, setFileName] = useState("");
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [isUploading, setIsUploading] = useState(false);
 
-    const onCropComplete = useCallback((_: Area, croppedAreaPixels: Area) => {
-        setCroppedAreaPixels(croppedAreaPixels);
-    }, []);
-
-    const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
+            const file = e.target.files[0];
+            setFileName(file.name);
             const reader = new FileReader();
-            reader.addEventListener("load", () => setImage(reader.result as string));
-            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = () => {
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
-    const createImage = (url: string) =>
-        new Promise<HTMLImageElement>((resolve, reject) => {
-            const img = new Image();
-            img.addEventListener("load", () => resolve(img));
-            img.addEventListener("error", error => reject(error));
-            img.src = url;
+    const getCroppedImg = async () => {
+        const imageObj = new Image();
+        imageObj.src = image;
+        await new Promise((resolve) => {
+            imageObj.onload = resolve;
         });
 
-    const getCroppedFile = async (imageSrc: string, pixelCrop: Area): Promise<File | null> => {
-        const img = await createImage(imageSrc);
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        if (!ctx) return null;
 
-        canvas.width = pixelCrop.width;
-        canvas.height = pixelCrop.height;
+        canvas.width = croppedAreaPixels.width;
+        canvas.height = croppedAreaPixels.height;
 
         ctx.drawImage(
-            img,
-            pixelCrop.x,
-            pixelCrop.y,
-            pixelCrop.width,
-            pixelCrop.height,
+            imageObj,
+            croppedAreaPixels.x,
+            croppedAreaPixels.y,
+            croppedAreaPixels.width,
+            croppedAreaPixels.height,
             0,
             0,
-            pixelCrop.width,
-            pixelCrop.height
+            croppedAreaPixels.width,
+            croppedAreaPixels.height
         );
 
         return new Promise((resolve) => {
             canvas.toBlob((blob) => {
-                if (blob && onSuccess) {
-                    const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
-                    resolve(file);
-                    onSuccess(file); // ✅ فایل واقعی رو میفرستیم بیرون
-                } else {
-                    resolve(null);
-                }
+                resolve(blob);
             }, "image/jpeg");
         });
     };
 
-    // هر بار کراپ تغییر کرد، فایل کراپ‌شده رو بساز
-    React.useEffect(() => {
-        if (image && croppedAreaPixels) {
-            getCroppedFile(image, croppedAreaPixels);
+    const onCropComplete = useCallback((_, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    }, []);
+
+    const uploadCroppedImage = async () => {
+        try {
+            setIsUploading(true);
+            const blob = await getCroppedImg();
+
+            const formData = new FormData();
+            formData.append("avatar", blob, fileName);
+
+            router.post(url, formData, {
+                forceFormData: true,
+                onSuccess: () => {
+                    setIsUploading(false);
+                    setImage(null);
+                    if (onSuccess) onSuccess();
+                },
+                onError: () => {
+                    setIsUploading(false);
+                    alert("خطا در آپلود تصویر");
+                },
+            });
+        } catch (err) {
+            console.error("خطا در پردازش تصویر:", err);
+            setIsUploading(false);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [image, croppedAreaPixels]);
+    };
 
     return (
-        <div className="flex flex-col gap-2">
-            {!image ? (
-                <input type="file" accept="image/*" onChange={onSelectFile} />
-            ) : (
-                <>
-                    <div className="relative w-full h-64 bg-gray-200">
-                        <Cropper
-                            image={image}
-                            crop={crop}
-                            zoom={zoom}
-                            aspect={aspect}
-                            onCropChange={setCrop}
-                            onCropComplete={onCropComplete}
-                            onZoomChange={setZoom}
-                        />
-                    </div>
-                    <button
-                        type="button"
-                        className="px-3 py-1 bg-gray-300 rounded mt-2"
-                        onClick={() => setImage(null)}
-                    >
-                        انتخاب دوباره
-                    </button>
-                </>
-            )}
-        </div>
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button variant="outline">{text}</Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle dir="rtl">آپلود تصویر</AlertDialogTitle>
+
+                    {!image ? (
+                        <div className="flex items-center justify-center w-full">
+                            <label
+                                htmlFor="dropzone-file"
+                                className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600"
+                            >
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <Cloud className="size-12 text-gray-950" />
+                                    <p className="mb-2 text-sm text-gray-500">
+                                        <span className="font-semibold">برای آپلود عکس کلیک کنید</span>
+                                    </p>
+                                    <p className="text-xs text-gray-500">فقط JPG (حداکثر 2MB)</p>
+                                </div>
+                                <input
+                                    id="dropzone-file"
+                                    type="file"
+                                    accept="image/jpeg"
+                                    onChange={handleFileChange}
+                                    className="hidden"
+                                />
+                            </label>
+                        </div>
+                    ) : (
+                        <>
+                            <div className="relative flex-1 min-h-[300px] bg-black rounded">
+                                <Cropper
+                                    image={image}
+                                    crop={crop}
+                                    zoom={zoom}
+                                    aspect={aspect}
+                                    onCropChange={setCrop}
+                                    onZoomChange={setZoom}
+                                    onCropComplete={onCropComplete}
+                                />
+                            </div>
+                            <div className="flex justify-between mt-4">
+                                <Button onClick={uploadCroppedImage} disabled={isUploading}>
+                                    {isUploading ? 'در حال آپلود...' : 'برش و آپلود'}
+                                </Button>
+                                <Button variant="secondary" onClick={() => setImage(null)}>
+                                    انتخاب مجدد تصویر
+                                </Button>
+                            </div>
+                        </>
+                    )}
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>انصراف</AlertDialogCancel>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
     );
 }

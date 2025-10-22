@@ -36,10 +36,6 @@ class ArticleController extends Controller
         try {
             $data = $request->validated();
             $article = Article::create($data);
-//            $article->clearMediaCollection('avatars');
-//            $name = $request->croppedImage->store('avatars/', 'public');
-//            $article->addMedia(storage_path('app/public/' . $name))
-//                ->toMediaCollection('avatars', 'public');
             return to_route('manager.article.index')->with('success', 'مقاله با موفقیت انتشار داده شد.');
         } catch (\Exception $exception) {
             Log::error('خطا در ذخیره مقاله:', $exception->getMessage());
@@ -51,31 +47,53 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         return Inertia::render('manager/article/edit', [
-            'article' => new ArticleResource($article),
+            'articleItem' => new ArticleResource($article),
         ]);
     }
 
     public function update(UpdateArticleRequest $request, Article $article)
     {
-
+        try {
+            $data = $request->validated();
+            $article->update($data);
+            return to_route('manager.article.index')->with('success', 'مقاله با موفقیت آپدیت شد داده شد.');
+        } catch (\Exception $exception) {
+            Log::error('خطا در اپدیت مقاله:', $exception->getMessage());
+            return to_route('manager.article.index')->with('error', 'آپدیت مقاله با خطا مواجه شد!!!');
+        }
     }
 
 
     public function status(Request $request, Article $article)
     {
-        // اعتبارسنجی ورودی
         $request->validate([
             'status' => 'required|in:active,check,deactivate',
         ]);
-
         try {
             $article->update([
                 'status' => $request->status,
             ]);
-
             return back()->with('success', 'وضعیت مقاله با موفقیت تغییر کرد.');
         } catch (\Exception $e) {
             return back()->with('error', 'تغییر وضعیت مقاله با خطا مواجه شد!');
+        }
+    }
+
+    public function avatar(Request $request, Article $article)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,jpg|max:2048', // اسم input همان "image" هست
+        ]);
+        try {
+            $article->clearMediaCollection('avatars');
+            $name = $request->avatar->store('avatars/', 'public');
+            $article->addMedia(storage_path('app/public/' . $name))
+                ->toMediaCollection('avatars', 'public');
+
+            return back()->with('success', 'اواتار با موفقیت اپلود شد.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'خطا در آپلود اواتار: ' . $e->getMessage());
         }
     }
 

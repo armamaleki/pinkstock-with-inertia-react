@@ -1,16 +1,17 @@
+import CkEditor from '@/components/CkEditor';
+import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import ManagerLayout from '@/layouts/manager-layout';
 import manager from '@/routes/manager';
 import article from '@/routes/manager/article';
 import type { BreadcrumbItem } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { FormEvent, useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import InputError from '@/components/input-error';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import CkEditor from '@/components/CkEditor';
+import ImageCropper from '@/components/image-cropper';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -26,15 +27,15 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '#',
     },
 ];
-export default function CreateArticle() {
-    const { data, setData, post, processing, errors, reset, clearErrors } =
+export default function CreateArticle({ articleItem }) {
+    const { data, setData, patch, processing, errors, reset, clearErrors } =
         useForm({
-            name: '',
-            slug: '',
-            meta_title: '',
-            meta_description: '',
-            short_description: '',
-            description: '',
+            name: articleItem.data.name || '',
+            slug: articleItem.data.slug || '',
+            meta_title: articleItem.data.meta_title || '',
+            meta_description: articleItem.data.meta_description || '',
+            short_description: articleItem.data.short_description || '',
+            description: articleItem.data.description || '',
         });
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -89,8 +90,8 @@ export default function CreateArticle() {
             return;
         }
         // @ts-ignore
-        post(article.store(), {
-            onSuccess: () => reset('name', 'phone', 'role'),
+        patch(article.update(articleItem.data.slug), {
+            onSuccess: () => reset(),
         });
     };
 
@@ -98,7 +99,7 @@ export default function CreateArticle() {
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className="bg-gray-800">
                 <CardHeader>اضافه کردن مقاله جدید</CardHeader>
-                <CardContent>
+                <CardContent className={'space-y-4'}>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="name">نام مقاله</Label>
@@ -220,7 +221,6 @@ export default function CreateArticle() {
                                     setData('description', value)
                                 }
                             />
-
                         </div>
                         <Button
                             type="submit"
@@ -230,6 +230,14 @@ export default function CreateArticle() {
                             {processing ? 'در حال ذخیره...' : 'ذخیره'}
                         </Button>
                     </form>
+
+                    <ImageCropper
+                        url={article.avatar(articleItem.data.slug)}
+                        // onSuccess={res => setAvatar(res.url)}
+                    />
+
+                    <img src={articleItem.data.avatar} alt="" />
+
                 </CardContent>
             </Card>
         </ManagerLayout>

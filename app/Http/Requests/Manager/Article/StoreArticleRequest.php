@@ -24,11 +24,10 @@ class StoreArticleRequest extends FormRequest
         return [
             "name" => 'required|max:255',
             "slug" => 'required|max:255|unique:articles,slug',
-            "meta_title" => 'required|max:65',
-            "meta_description" => 'required|max:150',
-            "short_description" => 'required|max:250',
-            "description" => 'nullable|string',
-//            "avatar" => 'required|image|mimes:jpg|max:2048',
+            'meta_title' => 'required|string|min:50|max:65',
+            'meta_description' => 'required|string|min:120|max:155',
+            'short_description' => 'required|string|max:250',
+            'description' => 'required|string',
         ];
     }
 }

@@ -33,6 +33,7 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::get('/{article}/edit', [\App\Http\Controllers\Manager\ArticleController::class, 'edit'])->name('edit');
         Route::patch('/{article}/update', [\App\Http\Controllers\Manager\ArticleController::class, 'update'])->name('update');
         Route::patch('/{article}/status' , [\App\Http\Controllers\Manager\ArticleController::class, 'status'])->name('status');
+        Route::post('/{article}/avatar', [\App\Http\Controllers\Manager\ArticleController::class, 'avatar'])->name('avatar');
     });
 
     Route::prefix('comment')->as('comment.')->group(function () {

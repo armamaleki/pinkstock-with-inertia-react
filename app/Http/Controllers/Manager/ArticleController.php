@@ -82,7 +82,7 @@ class ArticleController extends Controller
     public function avatar(Request $request, Article $article)
     {
         $request->validate([
-            'avatar' => 'required|image|mimes:jpeg,jpg|max:2048', // اسم input همان "image" هست
+            'avatar' => 'required|image|mimes:jpeg,jpg|max:2048',
         ]);
         try {
             $article->clearMediaCollection('avatars');

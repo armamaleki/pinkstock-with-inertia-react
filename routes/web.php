@@ -15,6 +15,11 @@ Route::get('/repairs', function () {
     return Inertia::render('repairs');
 })->name('repairs');
 
+Route::prefix('articles')->as('article.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Client\ArticleController::class , 'index'])->name('index');
+    Route::get('/{article}', [\App\Http\Controllers\Client\ArticleController::class , 'show'])->name('show');
+});
+
 
 Route::get('/product-category', function () {
     return Inertia::render('product-category/index');

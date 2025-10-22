@@ -11,6 +11,7 @@ import {
     Users,
     Videotape,
 } from 'lucide-react';
+import article from '@/routes/article';
 
 export default function HomeFooter() {
     return (
@@ -73,7 +74,7 @@ export default function HomeFooter() {
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/articles`}>
+                        href={article.index()}>
                         <Newspaper className={`size-6`}/>
                         مقالات پینک
                     </Link>

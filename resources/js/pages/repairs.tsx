@@ -4,6 +4,8 @@ import DescriptionAtTheBottomOfThePage from '@/components/description-at-the-bot
 import { Bug, Cog, MapPin, Phone, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Typewriter from '@/components/typewriter';
+import type { BreadcrumbItem } from '@/types';
+import { home } from '@/routes';
 
 const content = `
 <section id="repair-bottom-content" class="w-full max-w-6xl mx-auto px-4 py-8">
@@ -126,8 +128,18 @@ const content = `
 </section>
 `;
 export default function RepairsPage() {
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'پینک استوک',
+            href: home(),
+        },
+        {
+            title: 'تعمیر لپتاپ ',
+            href: "",
+        },
+    ];
     return (
-        <HomeLayout>
+        <HomeLayout breadcrumbs={breadcrumbs}>
             <Head>
                 <title>
                     تعمیر لپ‌تاپ | خدمات تخصصی تعمیر لپ‌تاپ در پینک استوک

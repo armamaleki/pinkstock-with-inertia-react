@@ -12,6 +12,9 @@ import {
     Videotape,
 } from 'lucide-react';
 import article from '@/routes/article';
+import { aboutUs, contactUs, faq, laptopPriceEstimate, repairs } from '@/routes';
+import store from '@/routes/store';
+import productCategory from '@/routes/product-category';
 
 export default function HomeFooter() {
     return (
@@ -32,43 +35,43 @@ export default function HomeFooter() {
                     <p className={`font-extrabold`}>دسترسی سریع</p>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/contact-us`}>
+                        href={contactUs()}>
                         <Contact className={`size-6`}/>
                         تماس با پینک
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/about-us`}>
+                        href={aboutUs()}>
                         <Users className={`size-6`}/>
-                        درباره ما
+                        ما که هستیم ؟؟
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/faq`}>
+                        href={faq()}>
                         <TableOfContents className={`size-6`}/>
                         سوالات متداول
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/store`}>
+                        href={store.index()}>
                         <Store className={`size-6`}/>
                         فروشگاه پینک استوک
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/laptop-price-estimate`}>
+                        href={laptopPriceEstimate()}>
                         <Calculator className={`size-6`}/>
                         محاسبه قیمت لپ تاپ
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/product-categories`}>
+                        href={productCategory.index()}>
                         <Grid2x2Plus className={`size-6`}/>
                         دسته بندی محصولات
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/repairs`}>
+                        href={repairs()}>
                         <ReplaceAll className={`size-6`}/>
                         تعمیر لپ تاپ در محل
                     </Link>
@@ -101,15 +104,6 @@ export default function HomeFooter() {
                         <br/>
                         09125918435
                     </Link>
-                    <div
-                        className={`flex gap-1 items-center `}>
-                        <div>
-                            <MapPin className={`size-6`}/>
-                        </div>
-                        <p>
-                            خیابان ولیعصر تقاطع چهار راه طالقانی پاساژ نور تهران ورودی اداری طبقه دهم اداری واحد۲۲۰۳
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>

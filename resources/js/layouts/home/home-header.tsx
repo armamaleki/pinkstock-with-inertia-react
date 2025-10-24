@@ -1,5 +1,5 @@
 import SearchBox from '@/layouts/home/search-box';
-import { dashboard, login } from '@/routes';
+import { dashboard, laptopPriceEstimate, login, repairs } from '@/routes';
 import type { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
 import {
@@ -36,14 +36,14 @@ export default function () {
                         </Link>
                         <Link
                             className={`flex items-center gap-1`}
-                            href={'/laptop-price-estimate'}
+                            href={laptopPriceEstimate()}
                         >
                             <Calculator className={`size-6`} />
                             تخمین قیمت لپ تاپ
                         </Link>
                         <Link
                             className={`flex items-center gap-1`}
-                            href={'/repairs'}
+                            href={repairs()}
                         >
                             <ReplaceAll className={`size-6`} />
                             تعمیر لپ تاپ

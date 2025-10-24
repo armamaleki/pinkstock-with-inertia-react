@@ -9,6 +9,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import type { BreadcrumbItem } from '@/types';
+import { home } from '@/routes';
 
 type Option = {
     value: string;
@@ -20,6 +22,7 @@ type SelectedOption = {
     max: number;
     label: string;
 };
+
 
 export default function LaptopPriceEstimate() {
     const brands: Option[] = [
@@ -194,8 +197,18 @@ export default function LaptopPriceEstimate() {
         });
     }
 
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'پینک استوک',
+            href: home(),
+        },
+        {
+            title: 'تخمین قیمت لپ‌تاپ',
+            href: "",
+        },
+    ];
     return (
-        <HomeLayout>
+        <HomeLayout breadcrumbs={breadcrumbs}>
             <Head>
                 <title>تخمین قیمت لپ‌تاپ و کامپیوتر دست دوم | پینک استوک</title>
                 <meta

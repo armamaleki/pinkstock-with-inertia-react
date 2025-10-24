@@ -233,7 +233,6 @@ export default function CreateArticle({ articleItem }) {
 
                     <ImageCropper
                         url={article.avatar(articleItem.data.slug)}
-                        // onSuccess={res => setAvatar(res.url)}
                     />
 
                     <img src={articleItem.data.avatar} alt="" />

@@ -20,10 +20,10 @@ Route::prefix('articles')->as('article.')->group(function () {
     Route::get('/{article}', [\App\Http\Controllers\Client\ArticleController::class , 'show'])->name('show');
 });
 
-
-Route::get('/product-category', function () {
-    return Inertia::render('product-category/index');
-})->name('product-category');
+Route::prefix('product-category')->as('product-category.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Client\ProductCategoryController::class , 'index'])->name('index');
+    Route::get('/{productCategory}', [\App\Http\Controllers\Client\ProductCategoryController::class , 'show'])->name('show');
+});
 
 
 

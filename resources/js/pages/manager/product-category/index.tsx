@@ -20,6 +20,9 @@ import ManagerSearchBox from '@/components/manager-search-box';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ButtonGroup } from '@/components/ui/button-group';
 import Paginate from '@/components/paginate';
+import article from '@/routes/manager/article';
+import StatusSwitch from '@/components/status-switch';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'مدیریت',
@@ -66,9 +69,11 @@ export default function Manager({productCategoriesLists}) {
                                     نام ویژگی
                                 </TableHead>
                                 <TableHead className="text-right">
-                                    ویژگی
+                                    وضعیت
                                 </TableHead>
-
+                                <TableHead className="text-right">
+                                    #
+                                </TableHead>
                                 <TableHead className="text-right">#</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -76,10 +81,21 @@ export default function Manager({productCategoriesLists}) {
                             {productCategoriesLists.data.map((categoryItem, index) => (
                                 <TableRow key={index}>
                                     <TableCell className="text-right">
+                                        <Avatar>
+                                            <AvatarImage
+                                                src={categoryItem.avatar}
+                                            />
+                                            <AvatarFallback>NO</AvatarFallback>
+                                        </Avatar>
+                                    </TableCell>
+                                    <TableCell className="text-right">
                                         {categoryItem?.name}
                                     </TableCell>
                                     <TableCell className="text-right">
-
+                                        <StatusSwitch
+                                            status={categoryItem?.status}
+                                            link={manager.productCategory.status(categoryItem?.slug)}
+                                        />
                                     </TableCell>
                                     <TableCell>
                                         <ButtonGroup>

@@ -21,6 +21,9 @@ class ProductCategory extends Model implements HasMedia
             ->addMediaConversion('thumb')
             ->fit(Fit::Contain, 150, 150)
             ->nonQueued();
+        $this->addMediaConversion('watermark')
+            ->watermark(public_path('assets/images/logo.png'))
+            ->nonQueued();
     }
 
     public function getRouteKeyName()

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Resources\Client\Article;
+namespace App\Http\Resources\Client\ProductCategory;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ShowArticleResource extends JsonResource
+class ShowProductCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

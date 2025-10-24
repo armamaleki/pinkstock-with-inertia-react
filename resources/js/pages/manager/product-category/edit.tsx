@@ -11,6 +11,8 @@ import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import Select from 'react-select';
 import CkEditor from '@/components/CkEditor';
+import ImageCropper from '@/components/image-cropper';
+import article from '@/routes/manager/article';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -104,7 +106,7 @@ export default function edit({ productCategoriesLists , productCategoryItem }) {
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className="bg-gray-800">
                 <CardHeader>اضافه کردن مقدار جدید</CardHeader>
-                <CardContent>
+                <CardContent className={'space-y-4'}>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="name">نام دسته بندی</Label>
@@ -269,6 +271,11 @@ export default function edit({ productCategoriesLists , productCategoryItem }) {
                             {processing ? 'در حال ذخیره...' : 'ذخیره'}
                         </Button>
                     </form>
+                    <ImageCropper
+                        url={manager.productCategory.avatar(productCategoryItem.data.slug)}
+                    />
+
+                    <img src={productCategoryItem.data.avatar} alt="" />
                 </CardContent>
             </Card>
         </ManagerLayout>

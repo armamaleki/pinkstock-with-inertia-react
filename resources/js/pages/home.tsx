@@ -12,7 +12,7 @@ import RepairServices from '@/components/repair-services';
 
 export default function Home() {
     return (
-        <HomeLayout>
+        <HomeLayout breadcrumbs={{}}>
             <Head>
                 <title>
                     خرید لپ تاپ استوک و دست دوم با قیمت مناسب | پینک استوک

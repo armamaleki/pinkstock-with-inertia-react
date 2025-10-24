@@ -12,6 +12,7 @@ import {
     Store,
 } from 'lucide-react';
 import logo from './logo.webp';
+import productCategory from '@/routes/product-category';
 
 export default function () {
     const { auth } = usePage<SharedData>().props;
@@ -49,7 +50,7 @@ export default function () {
                         </Link>
                         <Link
                             className={`flex items-center gap-1`}
-                            href={'/product-category'}
+                            href={productCategory.index()}
                         >
                             <Grid2x2Plus className={`size-6`} />
                             دسته بندی محصولات

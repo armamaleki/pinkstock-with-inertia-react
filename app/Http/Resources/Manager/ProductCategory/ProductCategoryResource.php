@@ -17,7 +17,7 @@ class ProductCategoryResource extends JsonResource
         return [
             'id'=>$this->id,
             'avatar' => $this->getMedia('avatars')->isNotEmpty()
-                ? $this->getMedia('avatars')->first()->getFullUrl('watermark')
+                ? $this->getMedia('avatars')->first()->getFullUrl('thumb')
                 : null,
             'name'=>$this->name ?? null,
             'slug'=>$this->slug ?? null,

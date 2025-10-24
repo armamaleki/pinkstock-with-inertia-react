@@ -72,6 +72,9 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::get('/{productCategory}/show', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'show'])->name('show');
         Route::get('/{productCategory}/edit', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'edit'])->name('edit');
         Route::patch('/{productCategory}/update', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'update'])->name('update');
+        Route::patch('/{productCategory}/status' , [\App\Http\Controllers\Manager\ProductCategoryController::class, 'status'])->name('status');
+        Route::post('/{productCategory}/avatar', [\App\Http\Controllers\Manager\ProductCategoryController::class, 'avatar'])->name('avatar');
+
     });
 
     Route::prefix('pink-academy')->as('pink-academy.')->group(function () {

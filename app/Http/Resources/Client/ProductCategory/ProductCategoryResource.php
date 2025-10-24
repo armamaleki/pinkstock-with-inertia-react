@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Client\Article;
+namespace App\Http\Resources\Client\ProductCategory;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ShowArticleResource extends JsonResource
+class ProductCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,13 +16,8 @@ class ShowArticleResource extends JsonResource
     {
         return [
             'name' => $this->name ?? null,
-            'meta_title' => $this->name ?? null,
-            'meta_description' => $this->name ?? null,
-            'slug' => $this->slug ?? null,
-            'created' => Carbon::create($this->updated_at)->ago() ?? null,
-            'creator' => $this->user->name ?? 'مدیر سایت',
             'short_description' => $this->short_description ?? null,
-            'description' => $this->description ?? null,
+            'slug' => $this->slug ?? null,
             'avatar' => $this->getMedia('avatars')->isNotEmpty()
                 ? $this->getMedia('avatars')->first()->getFullUrl('watermark')
                 : null,

@@ -1,7 +1,10 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import HomeLayout from '@/layouts/home-layout';
 import type { BreadcrumbItem } from '@/types';
 import { home } from '@/routes';
+import { ArrowDown01, ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react';
+import Paginate from '@/components/paginate';
+import SingleProduct from '@/components/single-product';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -13,7 +16,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: "",
     },
 ];
-export default function Index() {
+export default function Index({productLists}) {
     return (
         <HomeLayout breadcrumbs={breadcrumbs}>
             <Head>
@@ -68,10 +71,38 @@ export default function Index() {
                 />
             </Head>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div className="col-span-1 md:col-span-2 lg:col-span-3 space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <div
+                    className="border hidden md:block border-gray-400 rounded-xl bg-gray-800 h-screen  overflow-scroll p-3 shadow-lg shadow-sky-400">
+                    <p className="text-2xl font-bold mb-3">
+                        فیلتر ها
+                    </p>
+                </div>
+                <div className="col-span-1 md:col-span-3 lg:col-span-4 space-y-4">
+                    <div className="border-y p-2  gap-1 items-center flex overflow-x-scroll">
+                        <p className="hidden md:block">مرتب سازی بر اساس:</p>
+                        <Link href="#"
+                           className="flex text-nowrap gap-2 items-center  ">
+                            <ArrowDownNarrowWide/>
+                            جدیدترین
+                        </Link>
+                        <Link href="#"
+                           className="flex text-nowrap gap-2 items-center  ">
+                            <ArrowUpNarrowWide/>
+                            بیشترین قیمت
+                        </Link>
+                        <Link href="#"
+                           className="flex text-nowrap gap-2 items-center">
+                            <ArrowDown01/>
+                            کمترین قیمت
+                        </Link>
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
+                        {productLists.data.map((productitem , index)=>(
+                            <SingleProduct prodcutItem={productitem}/>
+                        ))}
+                    </div>
+                    <Paginate meta={productLists.meta}/>
                 </div>
             </div>
         </HomeLayout>

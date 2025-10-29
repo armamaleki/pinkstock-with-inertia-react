@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Client\Product\ProductCollection;
+use App\Http\Resources\Client\Product\ShowProductResource;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -31,6 +33,18 @@ class StoreController extends Controller
                 break;
         }
         $productLists = $query->paginate(12);
-        return Inertia::render('client/store/index');
+        return Inertia::render('client/store/index' , [
+            'productLists'=> new ProductCollection($productLists)
+        ]);
+    }
+
+    public function show(Product $product)
+    {
+        if ($product->status !== 'active') {
+            abort(404);
+        }
+        return Inertia::render('client/store/show' , [
+            'productItem' => new ShowProductResource($product)
+        ]);
     }
 }

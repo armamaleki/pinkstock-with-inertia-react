@@ -11,7 +11,6 @@ import {
     ShoppingCart,
     Store,
 } from 'lucide-react';
-import logo from './logo.webp';
 import productCategory from '@/routes/product-category';
 
 export default function () {
@@ -24,7 +23,9 @@ export default function () {
             >
                 <div className={`flex w-full items-center gap-2`}>
                     <Link href={`/`}>
-                        <img src={logo} alt="فروشگاه اینترنتی پینک استوک" />
+                        <img
+                            className={'w-24'}
+                            src={'/assets/images/logo.png'} alt="فروشگاه اینترنتی پینک استوک" />
                     </Link>
                     <div className={`flex flex-wrap items-center gap-1`}>
                         <Link

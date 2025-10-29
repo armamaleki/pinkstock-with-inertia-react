@@ -1,7 +1,10 @@
 import dotShape from './images/dotShape.png'
 import repaired2 from './images/repaired2.jpg'
 import repaired1 from './images/repaired1.jpg'
-import { Backpack, CreditCard } from 'lucide-react';
+import { Backpack, CreditCard, FileX } from 'lucide-react';
+import { Link } from '@inertiajs/react';
+import { Button } from '@/components/ui/button';
+import { repairs } from '@/routes';
 export default function RepairServices() {
 return(
     <div className={`grid grid-cols-1 lg:grid-cols-2 gap-4 items-center px-4`}>
@@ -31,7 +34,6 @@ return(
             </div>
             <h3 className={`font-bold`}>
                 از مشکل تا راه حل، فقط یک تماس فاصله داری
-
             </h3>
             <p>
                 برای هر مشکل سخت‌افزاری یا نرم‌افزاری، نیازی به جابه‌جایی دستگاه نیست.
@@ -42,6 +44,12 @@ return(
                 تیم ما با تجهیزات کامل و گارانتی خدمات، اطمینان می‌دهد که دستگاه شما در کوتاه‌ترین زمان دوباره آماده
                 کار باشد.
             </p>
+            <Button variant={'outline'} asChild>
+                <Link href={repairs()}>
+                    سفارش تعمیر لپتاپ
+                    <FileX/>
+                </Link>
+            </Button>
             <div className={`p-4 rounded-4xl border border-gray-600 divide-y`}>
                 <div className={`flex gap-1 items-center p-2`}>
                     <div className={`bg-pink-500 rounded-full p-2`}>

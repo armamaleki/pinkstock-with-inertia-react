@@ -79,14 +79,14 @@ export default function () {
                 </div>
             </div>
             <div
-                className={`fixed bottom-0 z-20 flex w-full justify-around divide-x divide-pink-400 border-t border-pink-300 bg-gray-800 p-2 shadow shadow-pink-300 md:hidden`}
+                className={`fixed -bottom-4 z-20 flex w-full justify-around divide-x divide-pink-400 border-t border-pink-300 bg-gray-800 p-2 shadow shadow-pink-300 md:hidden`}
             >
                 <Link
                     className={`flex w-full flex-col items-center text-center text-[10px]`}
                     href={'/'}
                 >
                     <Home className={`size-8`} />
-                    <h3>پینک استوک</h3>
+                    <h3>پینک</h3>
                 </Link>
                 <Link
                     className={`flex w-full flex-col items-center text-center text-[10px]`}

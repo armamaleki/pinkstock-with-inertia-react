@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('home');
-})->name('home');
+Route::get('/',[\App\Http\Controllers\Client\PagesController::class , 'home'])->name('home');
 
 Route::get('/repairs', function () {
     return Inertia::render('repairs');

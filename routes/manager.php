@@ -60,6 +60,13 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
 
     Route::prefix('product')->as('product.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\ProductController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Manager\ProductController::class, 'create'])->name('create');
+        Route::post('/store', [\App\Http\Controllers\Manager\ProductController::class, 'store'])->name('store');
+        Route::get('/{product}/show', [\App\Http\Controllers\Manager\ProductController::class, 'show'])->name('show');
+        Route::get('/{product}/edit', [\App\Http\Controllers\Manager\ProductController::class, 'edit'])->name('edit');
+        Route::patch('/{product}/update', [\App\Http\Controllers\Manager\ProductController::class, 'update'])->name('update');
+        Route::patch('/{product}/status' , [\App\Http\Controllers\Manager\ProductController::class, 'status'])->name('status');
+        Route::post('/{product}/avatar', [\App\Http\Controllers\Manager\ProductController::class, 'avatar'])->name('avatar');
     });
     Route::prefix('order')->as('order.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\OrderController::class, 'index'])->name('index');

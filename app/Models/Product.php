@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class Product extends Model
+class Product extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
@@ -22,7 +23,7 @@ class Product extends Model
             ->fit(Fit::Contain, 150, 150)
             ->nonQueued();
         $this->addMediaConversion('watermark')
-            ->watermark(public_path('asset/images/logo.png'))
+            ->watermark(public_path('assets/images/logo.png'))
             ->nonQueued();
     }
 

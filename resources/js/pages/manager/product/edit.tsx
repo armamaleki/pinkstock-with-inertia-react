@@ -1,42 +1,48 @@
+import InputError from '@/components/input-error';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import ManagerLayout from '@/layouts/manager-layout';
 import manager from '@/routes/manager';
-import article from '@/routes/manager/article';
+import product from '@/routes/manager/product';
 import type { BreadcrumbItem } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { FormEvent, useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import InputError from '@/components/input-error';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import CkEditor from '@/components/CkEditor';
+import ImageCropper from '@/components/image-cropper';
+import article from '@/routes/manager/article';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'مدیریت',
-        href: manager.index(),
-    },
-    {
-        title: 'مقالات',
-        href: article.index(),
-    },
-    {
-        title: 'اضافه کردن مقاله جدید',
-        href: '#',
-    },
-];
-export default function CreateArticle() {
-    const { data, setData, post, processing, errors, reset, clearErrors } =
+export default function ({ productCategoriesLists , productItem }) {
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'مدیریت',
+            href: manager.index(),
+        },
+        {
+            title: 'محصولات',
+            href: product.index(),
+        },
+        {
+            title: 'ویرایش کردن محصول جدید',
+            href: '#',
+        },
+    ];
+
+    const { data, setData, patch, processing, errors, reset, clearErrors } =
         useForm({
-            name: '',
-            slug: '',
-            meta_title: '',
-            meta_description: '',
-            short_description: '',
-            description: '',
+            name: productItem.data.name ||'',
+            slug: productItem.data.slug || '',
+            price: productItem.data.price || '',
+            quantity: productItem.data.quantity || '',
+            meta_title: productItem.data.meta_title || '',
+            meta_description: productItem.data.meta_description || '',
+            short_description: productItem.data.short_description || '',
+            description: productItem.data.description || '',
         });
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
+
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setLocalErrors({});
@@ -44,15 +50,17 @@ export default function CreateArticle() {
         const newErrors: Record<string, string> = {};
 
         if (!data.name) {
-            newErrors.name = 'نام مقاله الزامی است';
+            newErrors.name = 'نام محصول الزامی است';
         } else if (data.name.length > 250) {
-            newErrors.name = 'نام مقاله نباید بیشتر از ۲۵۰ کاراکتر باشد';
+            newErrors.name = 'نام محصول نباید بیشتر از ۲۵۰ کاراکتر باشد';
         }
-
         if (!data.slug) {
-            newErrors.slug = 'آدرس اینترنتی الزامیست';
+            newErrors.slug = 'آدرس اینترنتی الزامی است';
         } else if (data.slug.length > 250) {
             newErrors.slug = 'آدرس اینترنتی نباید بیشتر از ۲۵۰ کاراکتر باشد';
+        }
+        if (!data.quantity) {
+            newErrors.quantity = 'موجودی الزامیست';
         }
 
         if (!data.meta_title) {
@@ -77,7 +85,7 @@ export default function CreateArticle() {
             newErrors.short_description = 'توضیحات کوتاه الزامیست';
         } else if (data.short_description.length > 250) {
             newErrors.short_description =
-                'توضیح کوتاه نباید بیشتر از 155 کاراکتر باشد';
+                'توضیح کوتاه نباید بیشتر از 250 کاراکتر باشد';
         }
 
         if (!data.description) {
@@ -88,20 +96,18 @@ export default function CreateArticle() {
             setLocalErrors(newErrors);
             return;
         }
-        // @ts-ignore
-        post(article.store(), {
+        patch(product.update(productItem.data.slug), {
             onSuccess: () => reset(),
-        });
+        })
     };
-
     return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className="bg-gray-800">
-                <CardHeader>اضافه کردن مقاله جدید</CardHeader>
+                <CardHeader>اضافه کردن محصول جدید</CardHeader>
                 <CardContent>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
-                            <Label htmlFor="name">نام مقاله</Label>
+                            <Label htmlFor="name">نام محصول</Label>
                             <div className="col-span-1 md:col-span-3">
                                 <Input
                                     name="name"
@@ -111,7 +117,7 @@ export default function CreateArticle() {
                                         setData('name', e.target.value)
                                     }
                                     type="text"
-                                    placeholder="[کلید اصلی موضوع] + [وعده یا مزیت اصلی] + [نوع محتوا یا زاویه نگاه] + (اختیاری: عدد یا کلمه جادویی){اجباری}"
+                                    placeholder="[نوع محصول] + [برند] + [ویژگی کلیدی یا مدل] + [ویژگی خاص یا مزیت]{اجباری}"
                                 />
                                 <InputError
                                     message={errors.name || localErrors.name}
@@ -129,14 +135,49 @@ export default function CreateArticle() {
                                         setData('slug', e.target.value)
                                     }
                                     type="text"
-                                    placeholder="فقط انگلیسی وارد کنید (تیتر را به انگلیسی ترجمه کنید){اجباری}"
+                                    placeholder="[نوع محصول] + [برند] + [ویژگی کلیدی یا مدل] + [ویژگی خاص یا مزیت]{اجباری , ترجیها انگلیسی باشد}"
                                 />
                                 <InputError
                                     message={errors.slug || localErrors.slug}
                                 />
                             </div>
                         </div>
-
+                        <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
+                            <Label htmlFor="price">قیمت محصول</Label>
+                            <div className="col-span-1 md:col-span-3">
+                                <Input
+                                    name="price"
+                                    id="price"
+                                    value={data.price}
+                                    onChange={(e) =>
+                                        setData('price', e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="{درصورت خالی بودن میزنه ناموجود و قابل خرید نیست }"
+                                />
+                                <InputError
+                                    message={errors.price || localErrors.price}
+                                />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
+                            <Label htmlFor="quantity">موجودی انبار</Label>
+                            <div className="col-span-1 md:col-span-3">
+                                <Input
+                                    name="quantity"
+                                    id="quantity"
+                                    value={data.quantity}
+                                    onChange={(e) =>
+                                        setData('quantity', e.target.value)
+                                    }
+                                    type="text"
+                                    placeholder="{اجباریه و فقط عدد وارد کنید در سایت نمایش داده میشود}"
+                                />
+                                <InputError
+                                    message={errors.quantity || localErrors.quantity}
+                                />
+                            </div>
+                        </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="meta_title">تیتر متا</Label>
                             <div className="col-span-1 md:col-span-3">
@@ -207,7 +248,7 @@ export default function CreateArticle() {
                             </div>
                         </div>
                         <div>
-                            <Label htmlFor="message">متن مقاله</Label>
+                            <Label htmlFor="message">توضیحات محصول</Label>
                             <InputError
                                 message={
                                     errors.description ||
@@ -230,6 +271,12 @@ export default function CreateArticle() {
                             {processing ? 'در حال ذخیره...' : 'ذخیره'}
                         </Button>
                     </form>
+
+                    <ImageCropper
+                        url={product.avatar(productItem.data.slug)}
+                    />
+
+                    <img src={productItem.data.avatar} alt="" />
                 </CardContent>
             </Card>
         </ManagerLayout>

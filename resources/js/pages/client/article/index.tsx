@@ -76,7 +76,6 @@ export default function Article({ArticlesList}) {
                     content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
                 />
             </Head>
-
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <div className="col-span-1 md:col-span-2 lg:col-span-3 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

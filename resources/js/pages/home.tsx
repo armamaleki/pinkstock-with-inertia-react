@@ -9,67 +9,79 @@ import { Head } from '@inertiajs/react';
 import HomeHeroSection from '@/components/hero/home-hero-section';
 import CategoriesIconsHome from '@/components/hero/categories-icons-home';
 import RepairServices from '@/components/repair-services';
+import SingleArticle from '@/components/single-article';
 
-export default function Home() {
+export default function Home({ArticlesList}) {
+    console.log(ArticlesList);
     return (
         <HomeLayout breadcrumbs={{}}>
             <Head>
                 <title>
-                    خرید لپ تاپ استوک و دست دوم با قیمت مناسب | پینک استوک
+                    خرید محصولات دیجیتال، لپ تاپ، موبایل و لوازم جانبی با بهترین قیمت | پینک
                 </title>
+
                 <meta
                     name="description"
-                    content="پینک استوک فروشگاه تخصصی خرید لپ تاپ استوک و دست دوم تست شده و کارکرده با ضمانت 30 روزه سلامت و تعویض. عرضه انواع لپ تاپ‌ برندهای معتبر لنوو، اچ پی و دل با بهترین قیمت."
+                    content="فروشگاه اینترنتی پینک، مرجع خرید انواع محصولات دیجیتال، لپ تاپ، موبایل، کامپیوتر، گجت و لوازم جانبی با بهترین قیمت و ضمانت اصالت کالا. تجربه خرید مطمئن و اقتصادی از پینک."
                 />
-                <meta name="author" content="پینک استوک" />
-                <meta name="creator" content="پینک استوک" />
-                <meta name="application-name" content="پینک استوک" />
+
+                <meta name="author" content="پینک" />
+                <meta name="creator" content="پینک" />
+                <meta name="application-name" content="پینک" />
                 <meta
                     name="category"
-                    content="فروشگاه لپ تاپ استوک و دست دوم"
+                    content="فروشگاه اینترنتی چندمنظوره محصولات دیجیتال"
                 />
+
                 <link rel="canonical" href="https://pinkstock.net" />
+
                 <meta
                     property="og:title"
-                    content="خرید لپ تاپ استوک و دست دوم با قیمت مناسب | پینک استوک"
+                    content="خرید محصولات دیجیتال، لپ تاپ، موبایل و لوازم جانبی با بهترین قیمت | پینک"
                 />
                 <meta
                     property="og:description"
-                    content="پینک استوک فروشگاه تخصصی خرید لپ تاپ استوک و دست دوم تست شده و کارکرده با ضمانت 30 روزه سلامت و تعویض. عرضه انواع لپ تاپ‌ برندهای معتبر لنوو، اچ پی و دل با بهترین قیمت."
+                    content="فروشگاه اینترنتی پینک، مرجع خرید انواع محصولات دیجیتال، لپ تاپ، موبایل، گجت و لوازم جانبی با ضمانت اصالت و قیمت رقابتی. همین حالا خرید کن!"
                 />
                 <meta property="og:url" content="https://pinkstock.net" />
-                <meta property="og:site_name" content="پینک استوک" />
+                <meta property="og:site_name" content="پینک" />
                 <meta property="og:locale" content="fa_IR" />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content="/assets/images/laptop.png" />
+                <meta property="og:image" content="/assets/images/main-banner.png" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
                 <meta
                     property="og:image:alt"
-                    content="فروشگاه لپ‌تاپ استوک و دست دوم پینک استوک"
+                    content="فروشگاه اینترنتی پینک | خرید محصولات دیجیتال و لپ تاپ"
                 />
+
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta
                     name="twitter:title"
-                    content="خرید لپ تاپ استوک و دست دوم با قیمت مناسب | پینک استوک"
+                    content="خرید محصولات دیجیتال، لپ تاپ، موبایل و لوازم جانبی با بهترین قیمت | پینک"
                 />
                 <meta
                     name="twitter:description"
-                    content="پینک استوک فروشگاه تخصصی خرید لپ تاپ استوک و دست دوم تست شده و کارکرده با ضمانت 30 روزه سلامت و تعویض. عرضه انواع لپ تاپ‌ برندهای معتبر لنوو، اچ پی و دل با بهترین قیمت."
+                    content="فروشگاه اینترنتی پینک، عرضه‌کننده انواع محصولات دیجیتال و استوک با ضمانت اصالت و قیمت مناسب."
                 />
-                <meta
-                    name="twitter:image"
-                    content="/assets/images/laptop.png"
-                />
+                <meta name="twitter:image" content="/assets/images/main-banner.png" />
+
                 <meta name="robots" content="index, follow" />
                 <meta
                     name="googlebot"
                     content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
                 />
             </Head>
+
             <HomeHeroSection />
             <CategoriesIconsHome />
             <RepairServices/>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {ArticlesList.data.map((articleItem , index)=>(
+                    <SingleArticle key={index} articleValue={articleItem}/>
+                ))}
+            </div>
+
             <Accordion type="single" collapsible>
                 <AccordionItem value="item-1">
                     <AccordionTrigger>لپ تاپ استوک چیست</AccordionTrigger>
@@ -190,6 +202,7 @@ export default function Home() {
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
+
         </HomeLayout>
     );
 }

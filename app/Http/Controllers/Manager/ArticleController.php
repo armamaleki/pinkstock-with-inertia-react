@@ -38,7 +38,7 @@ class ArticleController extends Controller
             $article = Article::create($data);
             return to_route('manager.article.index')->with('success', 'مقاله با موفقیت انتشار داده شد.');
         } catch (\Exception $exception) {
-            Log::error('خطا در ذخیره مقاله:', $exception->getMessage());
+            Log::error( $exception->getMessage());
             return to_route('manager.article.index')->with('error', 'ساخت مقاله با خطا مواجه شد!!!');
         }
     }

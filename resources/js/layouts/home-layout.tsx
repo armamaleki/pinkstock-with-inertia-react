@@ -3,6 +3,8 @@ import { type ReactNode, useEffect } from 'react';
 import HomeHeader from '@/layouts/home/home-header';
 import HomeFooter from '@/layouts/home/home-footer';
 import { Breadcrumbs } from '@/components/breadcrumbs';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 interface HomeLayoutProps {
     children: ReactNode;
@@ -10,6 +12,9 @@ interface HomeLayoutProps {
 }
 
 export default function HomeLayout({ children, breadcrumbs, ...props }: HomeLayoutProps) {
+    useEffect(() => {
+        AOS.init();
+    }, [])
     useEffect(() => {
         document.documentElement.lang = 'fa';
         document.documentElement.dir = 'rtl';

@@ -1,0 +1,1 @@
+import{j as r}from"./app-CRy9AfdX.js";import{M as t}from"./manager-layout-Bv7IYnRD.js";/* empty css            */import"./button-P5yEV-ab.js";import"./createLucideIcon-DYtXt9MH.js";import"./index-CMWG4mbA.js";import"./newspaper-BVtyHQl7.js";import"./breadcrumbs-BPNACvDh.js";function u(){return r.jsx(t,{children:"user"})}export{u as default};

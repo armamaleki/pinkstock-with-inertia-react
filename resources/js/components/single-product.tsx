@@ -1,12 +1,13 @@
 import { Link } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
+import store from '@/routes/store';
 
 export default function SingleProduct({ prodcutItem }) {
     return (
-        <div>
+        <div className={'space-y-2'}>
             <div className="group flex flex-col items-center space-y-4 text-center">
                 <div className="relative overflow-hidden">
-                    <Link href="#">
+                    <Link href={store.show(prodcutItem)}>
                         <div className="overflow-hidden rounded-xl">
                             <img
                                 src={prodcutItem.avatar}
@@ -60,12 +61,12 @@ export default function SingleProduct({ prodcutItem }) {
                 </div>
             </div>
 
-            <Link href="#">
+            <Link href={store.show(prodcutItem)}>
                 <h2 className="text-2xl font-bold group-hover:text-pink-400 transition delay-150 duration-300  ease-in-out">
                     {prodcutItem.name}
                 </h2>
             </Link>
-            <Link href="#" className="p-2 rounded-full bg-pink-400 w-fit flex gap-1">
+            <Link href={store.show(prodcutItem)} className="p-2 rounded-full bg-pink-400 w-fit flex gap-1">
                 <ShoppingCart/>
                 اضافه کردن به سبد خرید
             </Link>

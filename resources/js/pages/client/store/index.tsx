@@ -81,7 +81,7 @@ export default function Index({productLists}) {
                 <div className="col-span-1 md:col-span-3 lg:col-span-4 space-y-4">
                     <div className="border-y p-2  gap-1 items-center flex overflow-x-scroll">
                         <p className="hidden md:block">مرتب سازی بر اساس:</p>
-                        <Link href="#"
+                        <Link href={'#'}
                            className="flex text-nowrap gap-2 items-center  ">
                             <ArrowDownNarrowWide/>
                             جدیدترین

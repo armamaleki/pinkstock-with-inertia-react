@@ -22,7 +22,7 @@ Route::prefix('product-categories')->as('product-category.')->group(function () 
 
 Route::prefix('store')->as('store.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Client\StoreController::class , 'index'])->name('index');
-    Route::get('/{store}', [\App\Http\Controllers\Client\StoreController::class , 'show'])->name('show');
+    Route::get('/{product}', [\App\Http\Controllers\Client\StoreController::class , 'show'])->name('show');
 });
 
 

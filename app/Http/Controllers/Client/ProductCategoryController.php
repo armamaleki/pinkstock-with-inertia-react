@@ -23,6 +23,12 @@ class ProductCategoryController extends Controller
         if ($productCategory->status !== 'active') {
             abort(404);
         }
+        $productCategory->load([
+            'products' => function ($query) {
+                $query->where('status', 'active')->latest();
+            }
+        ]);
+
         return Inertia::render('client/product-categories/show',[
             'productCategoryItem' => new ShowProductCategoryResource($productCategory),
         ]);

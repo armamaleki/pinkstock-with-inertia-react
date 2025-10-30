@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Client\ProductCategory;
 
+use App\Http\Resources\Client\Product\ProductResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -27,6 +28,9 @@ class ShowProductCategoryResource extends JsonResource
             'avatar' => $this->getMedia('avatars')->isNotEmpty()
                 ? $this->getMedia('avatars')->first()->getFullUrl('watermark')
                 : null,
+            'products' => ProductResource::collection(
+                $this->whenLoaded('products')
+            ),
         ];
     }
 }

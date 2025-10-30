@@ -3,6 +3,7 @@ import { home } from '@/routes';
 import { Head } from '@inertiajs/react';
 import HomeLayout from '@/layouts/home-layout';
 import productCategory from '@/routes/product-category';
+import SingleProduct from '@/components/single-product';
 
 export default function({productCategoryItem}) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -80,7 +81,11 @@ export default function({productCategoryItem}) {
             </Head>
 
             <h1 className="font-bold">{productCategoryItem.data?.name}</h1>
-
+            <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
+                {productCategoryItem.data.products.map((productitem , index)=>(
+                    <SingleProduct key={index} prodcutItem={productitem}/>
+                ))}
+            </div>
             <div
                 className={`editor text-justify`}
                 dangerouslySetInnerHTML={{

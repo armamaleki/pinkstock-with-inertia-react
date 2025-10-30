@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 
 Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-admin-panel'])->group(function () {
@@ -47,6 +48,12 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::get('/{attribute}/show', [\App\Http\Controllers\Manager\AttributeController::class, 'show'])->name('show');
         Route::get('/{attribute}/edit', [\App\Http\Controllers\Manager\AttributeController::class, 'edit'])->name('edit');
         Route::patch('/{attribute}/update', [\App\Http\Controllers\Manager\AttributeController::class, 'update'])->name('update');
+        Route::get('/{attribute}/values', function ($name) {
+            $attribute = \App\Models\Attribute::where('name', $name)->first();
+            return [
+                'values' => $attribute ? $attribute->values()->pluck('value')->toArray() : []
+            ];
+        })->name('values');
     });
 
     Route::prefix('value')->as('value.')->group(function () {
@@ -69,6 +76,9 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::post('/{product}/avatar', [\App\Http\Controllers\Manager\ProductController::class, 'avatar'])->name('avatar');
         Route::post('/{product}/gallery', [\App\Http\Controllers\Manager\ProductController::class, 'gallery'])->name('gallery');
     });
+
+
+
     Route::prefix('order')->as('order.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\OrderController::class, 'index'])->name('index');
     });

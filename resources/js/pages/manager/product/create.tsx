@@ -12,8 +12,11 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import CkEditor from '@/components/CkEditor';
 import Select from 'react-select';
+import axios from 'axios';
 
-export default function ({ productCategoriesLists }) {
+
+
+export default function ({ productCategoriesLists ,attributesList }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'مدیریت',
@@ -40,6 +43,7 @@ export default function ({ productCategoriesLists }) {
             short_description: '',
             description: '',
             category: [],
+            attributes: [],
         });
     const categoryOptions = productCategoriesLists.data.map((category)=>({
         value:category.id,
@@ -109,6 +113,43 @@ export default function ({ productCategoriesLists }) {
             onSuccess: () => reset(),
         })
     };
+    const [attributes, setAttributes] = useState([{ name: null, value: null }]);
+    const [valuesOptions, setValuesOptions] = useState({});
+
+    const attributeOptions = attributesList.data.map(item => ({
+        value: item.name,
+        label: item.name
+    }));
+    const handleAttributeChange = async (selected: any, index: number) => {
+        const newAttributes = [...attributes];
+        newAttributes[index].name = selected.value;
+        newAttributes[index].value = null; // مقدار قبلی پاک شود
+        setAttributes(newAttributes);
+        setData('attributes', newAttributes);
+
+        try {
+            const res = await axios.get(`/manager/attribute/${selected.value}/values`);
+            const formattedValues = res.data.values.map((v: string) => ({ label: v, value: v }));
+            setValuesOptions(prev => ({ ...prev, [selected.value]: formattedValues }));
+        } catch (err) {
+            console.error(err);
+            setValuesOptions(prev => ({ ...prev, [selected.value]: [] }));
+        }
+    };
+
+    const handleAttributeValueChange = (selected: any, index: number) => {
+        const newAttributes = [...attributes];
+        newAttributes[index].value = selected.value;
+        setAttributes(newAttributes);
+        setData('attributes', newAttributes);
+    };
+
+    const removeAttribute = (index: number) => {
+        const newAttributes = attributes.filter((_, i) => i !== index);
+        setAttributes(newAttributes);
+        setData('attributes', newAttributes);
+    };
+
     return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className="bg-gray-800">
@@ -168,8 +209,44 @@ export default function ({ productCategoriesLists }) {
                                 <InputError message={errors.category || localErrors.category} />
                             </div>
                         </div>
-
-
+                        <div className="grid grid-cols-1 items-start gap-2 md:grid-cols-4">
+                            <div className="flex justify-between items-center">
+                                <Label>ویژگی های محصول</Label>
+                                <Button type="button" variant="destructive" onClick={() => {
+                                    const newAttrs = [...attributes, { name: null, value: null }];
+                                    setAttributes(newAttrs);
+                                    setData('attributes', newAttrs);
+                                }}>ویژگی جدید</Button>
+                            </div>
+                            <div className="space-y-2 col-span-1 md:col-span-3">
+                                {attributes.map((attr, index) => (
+                                    <div key={index} className="grid grid-cols-3 gap-4 bg-gray-700 p-3 rounded">
+                                        <Select
+                                            placeholder="عنوان ویژگی"
+                                            value={attr.name ? { label: attr.name, value: attr.name } : null}
+                                            onChange={selected => handleAttributeChange(selected, index)}
+                                            options={attributeOptions}
+                                            className="text-black"
+                                        />
+                                        <Select
+                                            placeholder="مقدار ویژگی"
+                                            value={attr.value ? { label: attr.value, value: attr.value } : null}
+                                            onChange={selected => handleAttributeValueChange(selected, index)}
+                                            options={valuesOptions[attr.name] || []}
+                                            className="text-black"
+                                        />
+                                        <Button
+                                            type="button"
+                                            variant="destructive"
+                                            className="w-full"
+                                            onClick={() => removeAttribute(index)}
+                                        >
+                                            حذف
+                                        </Button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="price">قیمت محصول</Label>
                             <div className="col-span-1 md:col-span-3">

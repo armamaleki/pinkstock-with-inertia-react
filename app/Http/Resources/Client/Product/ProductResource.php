@@ -21,6 +21,15 @@ class ProductResource extends JsonResource
             'avatar' => $this->getMedia('avatars')->isNotEmpty()
                 ? $this->getMedia('avatars')->first()->getFullUrl('watermark')
                 : null,
+            'attributes' => $this->attributes->map(function ($attribute) {
+                return [
+                    'name' => $attribute->name,
+                    'icon' => $attribute->icon,
+                    'value' => optional(
+                        $attribute->values->firstWhere('id', $attribute->pivot->value_id)
+                    )->value,
+                ];
+            })->toArray(),
         ];
     }
 }

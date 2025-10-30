@@ -16,7 +16,7 @@ export default function SingleProduct({ prodcutItem }) {
                             />
                         </div>
                     </Link>
-                    <div className="absolute bg-gray-800 p-1 rounded-md bottom-5 left-5">
+                    <div className="absolute bottom-5 left-5 rounded-md bg-gray-800 p-1">
                         {prodcutItem.price ? (
                             <div className="flex items-center gap-1">
                                 <span className="text-2xl">
@@ -40,34 +40,34 @@ export default function SingleProduct({ prodcutItem }) {
                         )}
                     </div>
 
-                    {/*<div class="absolute right-5 top-5 h-full overflow -scroll">*/}
-                    {/*    <div class="flex flex-col space-y-1 items-center">*/}
-                    {/*        @foreach($product->attributes as $attribute)*/}
-                    {/*        <div x-data="{ open: false }" class="bg-sky-500 rounded-full p-1 relative ">*/}
-                    {/*            <div*/}
-                    {/*                class="size-6"*/}
-                    {/*            @mouseover="open = true" @mouseover.away="open = false">*/}
-                    {/*            {!! $attribute->icon !!}*/}
+                    <div className="absolute top-5 right-5 h-full">
+                        <div className="flex flex-col items-center space-y-1">
+                            {prodcutItem.attributes.map((attribute, index) => (
+                                <div key={index} className="bg-pink-400 rounded-full p-1 relative group">
+                                    <div className="w-6 h-6 flex items-center justify-center">
+                                        <span dangerouslySetInnerHTML={{ __html: attribute.icon || '' }} />
+                                    </div>
+                                    <div className="absolute right-10 text-nowrap top-1 border-b text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        {attribute.value}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                    {/*        </div>*/}
-                    {/*        <div*/}
-                    {/*            class="absolute text-nowrap right-10 top-1 border-b text-sky-400"*/}
-                    {/*            x-show="open">*/}
-                    {/*            {{ $attribute->values->firstWhere('id', $attribute->pivot->value_id)?->value }}*/}
-                    {/*        </div>*/}
-                    {/*    </div>*/}
-                    {/*    @endforeach*/}
-                    {/*</div>*/}
                 </div>
             </div>
 
             <Link href={store.show(prodcutItem)}>
-                <h2 className="text-2xl font-bold group-hover:text-pink-400 transition delay-150 duration-300  ease-in-out">
+                <h2 className="text-2xl font-bold transition delay-150 duration-300 ease-in-out group-hover:text-pink-400">
                     {prodcutItem.name}
                 </h2>
             </Link>
-            <Link href={store.show(prodcutItem)} className="p-2 rounded-full bg-pink-400 w-fit flex gap-1">
-                <ShoppingCart/>
+            <Link
+                href={store.show(prodcutItem)}
+                className="flex w-fit gap-1 rounded-full bg-pink-400 p-2"
+            >
+                <ShoppingCart />
                 اضافه کردن به سبد خرید
             </Link>
         </div>

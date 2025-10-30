@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Manager;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Manager\Product\StoreProductRequest;
 use App\Http\Requests\Manager\Product\UpdateProductRequest;
+use App\Http\Resources\Manager\Attribute\AttributeCollection;
 use App\Http\Resources\Manager\Product\ProductCollection;
 use App\Http\Resources\Manager\Product\ProductResource;
 use App\Http\Resources\Manager\ProductCategory\ProductCategoryCollection;
+use App\Models\Attribute;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Http\Request;
@@ -32,8 +34,10 @@ class ProductController extends Controller
     public function create()
     {
         $productCategories = ProductCategory::all();
+        $attributesList = Attribute::all();
         return Inertia::render('manager/product/create', [
-            'productCategoriesLists' => new ProductCategoryCollection($productCategories)
+            'productCategoriesLists' => new ProductCategoryCollection($productCategories),
+            'attributesList' => new AttributeCollection($attributesList),
         ]);
     }
 
@@ -43,6 +47,21 @@ class ProductController extends Controller
             $data = $request->validated();
             $product = Product::create($data);
             $product->categories()->attach($data['category']);
+            $attributes = collect($data['attributes']);
+            $attributes->each(function ($item) use ($product) {
+                if (is_null($item['name']) || is_null($item['value'])) {
+                    return;
+                }
+                $attr = Attribute::firstOrCreate([
+                    'name' => $item['name'],
+                    'user_id' => auth()->id(),
+                ]);
+
+                $attr_value = $attr->values()->firstOrCreate([
+                    'value' => $item['value'],
+                ]);
+                $product->attributes()->attach($attr->id, ['value_id' => $attr_value->id]);
+            });
             return to_route('manager.product.index')->with('success', 'محصول با موفقیت انتشار داده شد.');
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
@@ -59,9 +78,11 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $productCategories = ProductCategory::all();
+        $attributesList = Attribute::all();
         return Inertia::render('manager/product/edit', [
             'productCategoriesLists' => new ProductCategoryCollection($productCategories),
             'productItem' => new ProductResource($product),
+            'attributesList' => new AttributeCollection($attributesList),
         ]);
     }
 
@@ -69,11 +90,27 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, Product $product)
     {
         try {
+            $data = $request->validated();
             $product->update($request->validated());
             $product->categories()->detach();
-//            $product->attributes()->detach();
             $product->categories()->attach($request['category']);
-//            $product->attributes()->attach($data['attributes']);
+            $product->attributes()->detach();
+            $attributes = collect($data['attributes']);
+            $attributes->each(function ($item) use ($product) {
+                if (is_null($item['name']) || is_null($item['value'])) {
+                    return;
+                }
+                $attr = Attribute::firstOrCreate([
+                    'name' => $item['name'],
+                    'user_id' => auth()->id(),
+                ]);
+                $attr_value = $attr->values()->firstOrCreate([
+                    'value' => $item['value'],
+                ]);
+                $product->attributes()->attach($attr->id, [
+                    'value_id' => $attr_value->id
+                ]);
+            });
             return to_route('manager.product.index')->with('success', 'محصول با موفقیت ویرایش شد.');
         }catch (\Exception $exception){
             Log::error($exception->getMessage());

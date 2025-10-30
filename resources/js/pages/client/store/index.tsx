@@ -99,7 +99,7 @@ export default function Index({productLists}) {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
                         {productLists.data.map((productitem , index)=>(
-                            <SingleProduct prodcutItem={productitem}/>
+                            <SingleProduct key={index} prodcutItem={productitem}/>
                         ))}
                     </div>
                     <Paginate meta={productLists.meta}/>

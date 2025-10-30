@@ -27,6 +27,14 @@ class ProductResource extends JsonResource
                     'name' => $category->name,
                 ];
             }),
+            'attributes' => $this->attributes->map(function ($attribute) {
+                return [
+                    'name' => $attribute->name,
+                    'value' => $attribute->values
+                        ->firstWhere('id', $attribute->pivot->value_id)
+                        ?->value, // مقدار واقعی
+                ];
+            }),
             'name' => $this->name ?? null,
             'slug' => $this->slug ?? null,
             'price' => $this->price ?? null,

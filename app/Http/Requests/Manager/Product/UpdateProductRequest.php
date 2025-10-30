@@ -32,8 +32,9 @@ class UpdateProductRequest extends FormRequest
             "quantity" => 'nullable|numeric|min:0',
             'category' => ['required', 'array', 'min:1'],
             'category.*' => ['integer', 'exists:product_categories,id'],
-//            'attributes' => ['required', 'array', 'min:1'],
-//            'attributes.*' => ['integer', 'exists:attributes,id'],
+            'attributes' => ['required', 'array', 'min:1'],
+            'attributes.*.name' => ['required', 'string', 'exists:attributes,name'], // بررسی نام ویژگی
+            'attributes.*.value' => ['required', 'string'], // بررسی مقدار ویژگی
         ];
     }
 }

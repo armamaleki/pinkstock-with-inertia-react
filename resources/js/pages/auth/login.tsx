@@ -9,7 +9,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useForm } from '@inertiajs/react';
 import { FormEvent, useEffect, useState } from 'react';
 import { login } from '@/routes';
-import { verify } from '@/routes/login';
 
 interface LoginProps {
     otp_sent?: boolean;

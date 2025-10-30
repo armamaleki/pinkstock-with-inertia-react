@@ -37,7 +37,7 @@ class AuthenticatedSessionController extends Controller
     {
         $data = $request->validated();
 //        $otp = rand(10000, 99999);
-        $otp = 12345;
+        $otp = 92384;
         Cache::put('otp_' . $data['phone'], $otp, now()->addMinutes(2));
 
         $user = User::firstOrCreate(

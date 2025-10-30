@@ -22,7 +22,7 @@ class Attribute extends Model
 
     public function values()
     {
-//        return $this->hasMany(AttributeValue::class);
+        return $this->hasMany(Value::class);
     }
 
     protected static function booted()

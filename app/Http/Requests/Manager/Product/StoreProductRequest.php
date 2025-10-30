@@ -21,6 +21,7 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
+//        dd($this->all());
         return [
             "name" => 'required|max:255',
             "slug" => 'required|max:255|unique:products,slug',
@@ -32,8 +33,9 @@ class StoreProductRequest extends FormRequest
             "quantity" => 'nullable|numeric|min:0',
             'category' => ['required', 'array', 'min:1'],
             'category.*' => ['integer', 'exists:product_categories,id'],
-//            'attributes' => ['required', 'array', 'min:1'],
-//            'attributes.*' => ['integer', 'exists:attributes,id'],
+            'attributes' => ['required', 'array', 'min:1'],
+            'attributes.*.name' => ['required', 'string', 'exists:attributes,name'], // بررسی نام ویژگی
+            'attributes.*.value' => ['required', 'string'], // بررسی مقدار ویژگی
         ];
     }
 }

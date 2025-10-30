@@ -1,20 +1,20 @@
+import CkEditor from '@/components/CkEditor';
+import ImageCropper from '@/components/image-cropper';
 import InputError from '@/components/input-error';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import ManagerLayout from '@/layouts/manager-layout';
 import manager from '@/routes/manager';
 import product from '@/routes/manager/product';
 import type { BreadcrumbItem } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { FormEvent, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import CkEditor from '@/components/CkEditor';
-import ImageCropper from '@/components/image-cropper';
-import article from '@/routes/manager/article';
+import Select from 'react-select';
 
-export default function ({ productCategoriesLists , productItem }) {
+export default function ({ productCategoriesLists, productItem }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'مدیریت',
@@ -29,10 +29,9 @@ export default function ({ productCategoriesLists , productItem }) {
             href: '#',
         },
     ];
-
     const { data, setData, patch, processing, errors, reset, clearErrors } =
         useForm({
-            name: productItem.data.name ||'',
+            name: productItem.data.name || '',
             slug: productItem.data.slug || '',
             price: productItem.data.price || '',
             quantity: productItem.data.quantity || '',
@@ -40,7 +39,12 @@ export default function ({ productCategoriesLists , productItem }) {
             meta_description: productItem.data.meta_description || '',
             short_description: productItem.data.short_description || '',
             description: productItem.data.description || '',
+            category: productItem.data.categories?.map(category => category.id) || [],
         });
+    const categoryOptions = productCategoriesLists.data.map((category)=>({
+        value:category.id,
+        label:category.name,
+    }))
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -91,14 +95,18 @@ export default function ({ productCategoriesLists , productItem }) {
         if (!data.description) {
             newErrors.description = 'توضیحات الزامیه ';
         }
+        if (!data.category.length) {
+            newErrors.category = 'حداقل یک دسته بندی انتخاب کنید';
+        }
 
         if (Object.keys(newErrors).length > 0) {
             setLocalErrors(newErrors);
             return;
         }
+
         patch(product.update(productItem.data.slug), {
             onSuccess: () => reset(),
-        })
+        });
     };
     return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
@@ -143,6 +151,23 @@ export default function ({ productCategoriesLists , productItem }) {
                             </div>
                         </div>
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
+                            <Label htmlFor="category">دسته بندی محصول</Label>
+                            <div className="col-span-1 md:col-span-3">
+                                <Select
+                                    id="category"
+                                    isMulti
+                                    placeholder="چند دسته بندی انتخاب کنید..."
+                                    options={categoryOptions}
+                                    value={categoryOptions.filter(opt => data.category.includes(opt.value))}
+                                    onChange={(selected) =>
+                                        setData('category', selected ? selected.map(opt => opt.value) : [])
+                                    }
+                                    className="text-black"
+                                />
+                                <InputError message={errors.category || localErrors.category} />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="price">قیمت محصول</Label>
                             <div className="col-span-1 md:col-span-3">
                                 <Input
@@ -174,7 +199,9 @@ export default function ({ productCategoriesLists , productItem }) {
                                     placeholder="{اجباریه و فقط عدد وارد کنید در سایت نمایش داده میشود}"
                                 />
                                 <InputError
-                                    message={errors.quantity || localErrors.quantity}
+                                    message={
+                                        errors.quantity || localErrors.quantity
+                                    }
                                 />
                             </div>
                         </div>
@@ -261,7 +288,6 @@ export default function ({ productCategoriesLists , productItem }) {
                                     setData('description', value)
                                 }
                             />
-
                         </div>
                         <Button
                             type="submit"
@@ -272,11 +298,17 @@ export default function ({ productCategoriesLists , productItem }) {
                         </Button>
                     </form>
 
-                    <ImageCropper
-                        url={product.avatar(productItem.data.slug)}
-                    />
-
+                    <ImageCropper url={product.avatar(productItem.data.slug)} />
                     <img src={productItem.data.avatar} alt="" />
+                    <ImageCropper
+                        text={'آپلود گالری'}
+                        url={product.gallery(productItem.data.slug)}
+                    />
+                    <div className={'flex flex-wrap'}>
+                        {productItem.data.galleries.map((gallery, index) => (
+                            <img key={index} src={gallery} alt="" />
+                        ))}
+                    </div>
                 </CardContent>
             </Card>
         </ManagerLayout>

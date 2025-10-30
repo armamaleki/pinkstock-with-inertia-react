@@ -1,36 +1,20 @@
 import ManagerLayout from '@/layouts/manager-layout';
 import type { BreadcrumbItem } from '@/types';
 import manager from '@/routes/manager';
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { Link } from '@inertiajs/react';
-import article from '@/routes/manager/article';
 import { Eye, Pen, Plus } from 'lucide-react';
 import ManagerSearchBox from '@/components/manager-search-box';
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import StatusSwitch from '@/components/status-switch';
 import { ButtonGroup } from '@/components/ui/button-group';
 import Paginate from '@/components/paginate';
 import product from '@/routes/manager/product';
 
-
-export default function Manager({productList}) {
+export default function Manager({ productList }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'مدیریت',
@@ -41,7 +25,7 @@ export default function Manager({productList}) {
             href: '#',
         },
     ];
-    return(
+    return (
         <ManagerLayout breadcrumbs={breadcrumbs}>
             <Card className={'bg-gray-800 shadow shadow-pink-400'}>
                 <CardHeader className="flex flex-row items-center justify-between p-2">
@@ -66,9 +50,7 @@ export default function Manager({productList}) {
                 </CardHeader>
                 <CardContent className={'bg-gray-900'}>
                     <Table>
-                        <TableCaption>
-                           لیست محصولات
-                        </TableCaption>
+                        <TableCaption>لیست محصولات</TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="text-right">
@@ -76,6 +58,9 @@ export default function Manager({productList}) {
                                 </TableHead>
                                 <TableHead className="text-right">
                                     نام محصول
+                                </TableHead>
+                                <TableHead className="text-right">
+                                    دسته بندی
                                 </TableHead>
                                 <TableHead className="text-right">
                                     قیمت
@@ -110,12 +95,24 @@ export default function Manager({productList}) {
                                         {productItem?.name}
                                     </TableCell>
                                     <TableCell className="text-right">
+                                        {productItem?.categories?.map(
+                                            (category, index) => (
+                                                <span key={index}>
+                                                    {category.name} |
+                                                </span>
+                                            ),
+                                        )}
+                                    </TableCell>
+
+                                    <TableCell className="text-right">
                                         {productItem?.price}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <StatusSwitch
                                             status={productItem?.status}
-                                            link={product.status(productItem?.slug)}
+                                            link={product.status(
+                                                productItem?.slug,
+                                            )}
                                         />
                                     </TableCell>
                                     <TableCell className="text-right">
@@ -142,7 +139,7 @@ export default function Manager({productList}) {
                                             <Button asChild>
                                                 <Link
                                                     href={product.edit(
-                                                        productItem .slug,
+                                                        productItem.slug,
                                                     )}
                                                 >
                                                     <Pen />
@@ -159,7 +156,6 @@ export default function Manager({productList}) {
                     <Paginate meta={productList.meta} />
                 </CardFooter>
             </Card>
-
         </ManagerLayout>
-    )
+    );
 }

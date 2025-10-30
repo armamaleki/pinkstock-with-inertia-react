@@ -30,8 +30,8 @@ class UpdateProductRequest extends FormRequest
             'description' => 'required|string',
             "price" => 'nullable|numeric|min:0',
             "quantity" => 'nullable|numeric|min:0',
-//            'product_category' => ['required', 'array', 'min:1'],
-//            'product_category.*' => ['integer', 'exists:product_categories,id'],
+            'category' => ['required', 'array', 'min:1'],
+            'category.*' => ['integer', 'exists:product_categories,id'],
 //            'attributes' => ['required', 'array', 'min:1'],
 //            'attributes.*' => ['integer', 'exists:attributes,id'],
         ];

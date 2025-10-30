@@ -67,6 +67,7 @@ Route::prefix('manager')->as('manager.')->middleware(['auth', 'permission:show-a
         Route::patch('/{product}/update', [\App\Http\Controllers\Manager\ProductController::class, 'update'])->name('update');
         Route::patch('/{product}/status' , [\App\Http\Controllers\Manager\ProductController::class, 'status'])->name('status');
         Route::post('/{product}/avatar', [\App\Http\Controllers\Manager\ProductController::class, 'avatar'])->name('avatar');
+        Route::post('/{product}/gallery', [\App\Http\Controllers\Manager\ProductController::class, 'gallery'])->name('gallery');
     });
     Route::prefix('order')->as('order.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Manager\OrderController::class, 'index'])->name('index');

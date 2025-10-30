@@ -22,6 +22,9 @@ class ShowProductResource extends JsonResource
             'avatar_thumb' => $this->getMedia('avatars')->isNotEmpty()
                 ? $this->getMedia('avatars')->first()->getFullUrl('thumb')
                 : null,
+            'galleries' => $this->getMedia('galleries')->map(fn($media) => $media->getFullUrl('watermark')),
+
+            'galleries_thumb' => $this->getMedia('galleries')->map(fn($media) => $media->getFullUrl('thumb')),
             'name' => $this->name ?? null,
             'slug' => $this->slug ?? null,
             'price' => $this->price ?? null,

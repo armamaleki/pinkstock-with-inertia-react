@@ -20,6 +20,13 @@ class ProductResource extends JsonResource
             'avatar' => $this->getMedia('avatars')->isNotEmpty()
                 ? $this->getMedia('avatars')->first()->getFullUrl('thumb')
                 : null,
+            'galleries' => $this->getMedia('galleries')->map(fn($media) => $media->getFullUrl('thumb')),
+            'categories' => $this->categories->map(function ($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                ];
+            }),
             'name' => $this->name ?? null,
             'slug' => $this->slug ?? null,
             'price' => $this->price ?? null,

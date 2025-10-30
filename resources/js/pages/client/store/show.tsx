@@ -11,7 +11,6 @@ import 'swiper/css/thumbs';
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { useState } from 'react';
 
-
 export default function ShowProduct({ productItem }) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
@@ -118,8 +117,18 @@ export default function ShowProduct({ productItem }) {
                         <SwiperSlide>
                             <img
                                 className={'w-full'}
-                                src={productItem.data.avatar} />
+                                src={productItem.data.avatar}
+                            />
                         </SwiperSlide>
+                        {productItem.data.galleries.map(
+                            (gallery, index) => (
+                                <SwiperSlide key={index}>
+                                    <img
+                                        className={'w-full'}
+                                        src={gallery} />
+                                </SwiperSlide>
+                            ),
+                        )}
                     </Swiper>
                     <Swiper
                         onSwiper={setThumbsSwiper}
@@ -134,7 +143,13 @@ export default function ShowProduct({ productItem }) {
                         <SwiperSlide>
                             <img src={productItem.data.avatar_thumb} />
                         </SwiperSlide>
-
+                        {productItem.data.galleries_thumb.map(
+                            (gallery, index) => (
+                                <SwiperSlide key={index}>
+                                    <img src={gallery} />
+                                </SwiperSlide>
+                            ),
+                        )}
                     </Swiper>
                 </div>
                 <div>
@@ -183,15 +198,21 @@ export default function ShowProduct({ productItem }) {
                 </div>
             </div>
             <div
-                className={`editor text-justify bg-gray-800 p-2 rounded-xl shadow-lg shadow-sky-400 editor`}
+                className={`editor editor rounded-xl bg-gray-800 p-2 text-justify shadow-lg shadow-sky-400`}
                 dangerouslySetInnerHTML={{
-                    __html: (productItem.data.description)
-                        .replace(/&zwnj;|&zwj;|&nbsp;|&shy;|&thinsp;|&ensp;|&emsp;|&hairsp;/g, " ")
-                        .replace(/[\u200C\u200D\u00A0\u00AD\u200A\u2000\u2001\u2002\u2003]/g, " ")
-                        .replace(/\s+/g, " ")
-                        .trim()
-                }}>
-            </div>
+                    __html: productItem.data.description
+                        .replace(
+                            /&zwnj;|&zwj;|&nbsp;|&shy;|&thinsp;|&ensp;|&emsp;|&hairsp;/g,
+                            ' ',
+                        )
+                        .replace(
+                            /[\u200C\u200D\u00A0\u00AD\u200A\u2000\u2001\u2002\u2003]/g,
+                            ' ',
+                        )
+                        .replace(/\s+/g, ' ')
+                        .trim(),
+                }}
+            ></div>
         </HomeLayout>
     );
 }

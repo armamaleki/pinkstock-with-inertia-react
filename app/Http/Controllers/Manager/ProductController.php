@@ -42,6 +42,7 @@ class ProductController extends Controller
         try {
             $data = $request->validated();
             $product = Product::create($data);
+            $product->categories()->attach($data['category']);
             return to_route('manager.product.index')->with('success', 'محصول با موفقیت انتشار داده شد.');
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
@@ -69,6 +70,10 @@ class ProductController extends Controller
     {
         try {
             $product->update($request->validated());
+            $product->categories()->detach();
+//            $product->attributes()->detach();
+            $product->categories()->attach($request['category']);
+//            $product->attributes()->attach($data['attributes']);
             return to_route('manager.product.index')->with('success', 'محصول با موفقیت ویرایش شد.');
         }catch (\Exception $exception){
             Log::error($exception->getMessage());
@@ -107,6 +112,23 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'خطا در آپلود اواتار: ' . $e->getMessage());
+        }
+    }
+
+    public function gallery(Request $request, Product $product)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,jpg|max:2048',
+        ]);
+        try {
+            $name = $request->avatar->store('galleries/', 'public');
+            $product->addMedia(storage_path('app/public/' . $name))
+                ->toMediaCollection('galleries', 'public');
+
+            return back()->with('success', 'عکس گالری با موفقیت اپلود شد.');
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return back()->with('error', 'خطا در آپلود تصویر: ' . $e->getMessage());
         }
     }
 }

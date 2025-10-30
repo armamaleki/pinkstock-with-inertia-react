@@ -11,6 +11,7 @@ import { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import CkEditor from '@/components/CkEditor';
+import Select from 'react-select';
 
 export default function ({ productCategoriesLists }) {
     const breadcrumbs: BreadcrumbItem[] = [
@@ -38,7 +39,12 @@ export default function ({ productCategoriesLists }) {
             meta_description: '',
             short_description: '',
             description: '',
+            category: [],
         });
+    const categoryOptions = productCategoriesLists.data.map((category)=>({
+        value:category.id,
+        label:category.name,
+    }))
     const [localErrors, setLocalErrors] = useState<Record<string, string>>({});
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -90,6 +96,11 @@ export default function ({ productCategoriesLists }) {
             newErrors.description = 'توضیحات الزامیه ';
         }
 
+        if (!data.category.length) {
+            newErrors.category = 'حداقل یک دسته بندی انتخاب کنید';
+        }
+
+
         if (Object.keys(newErrors).length > 0) {
             setLocalErrors(newErrors);
             return;
@@ -140,6 +151,25 @@ export default function ({ productCategoriesLists }) {
                                 />
                             </div>
                         </div>
+                        <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
+                            <Label htmlFor="category">دسته بندی محصول</Label>
+                            <div className="col-span-1 md:col-span-3">
+                                <Select
+                                    id="category"
+                                    isMulti
+                                    placeholder="چند دسته بندی انتخاب کنید..."
+                                    options={categoryOptions}
+                                    value={categoryOptions.filter(opt => data.category.includes(opt.value))}
+                                    onChange={(selected) =>
+                                        setData('category', selected ? selected.map(opt => opt.value) : [])
+                                    }
+                                    className="text-black"
+                                />
+                                <InputError message={errors.category || localErrors.category} />
+                            </div>
+                        </div>
+
+
                         <div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">
                             <Label htmlFor="price">قیمت محصول</Label>
                             <div className="col-span-1 md:col-span-3">

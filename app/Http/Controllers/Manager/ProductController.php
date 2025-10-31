@@ -139,18 +139,21 @@ class ProductController extends Controller
         $request->validate([
             'avatar' => 'required|image|mimes:jpeg,jpg|max:2048',
         ]);
+
         try {
             $product->clearMediaCollection('avatars');
-            $name = $request->avatar->store('avatars/', 'public');
-            $product->addMedia(storage_path('app/public/' . $name))
+
+            $product
+                ->addMediaFromRequest('avatar')
                 ->toMediaCollection('avatars', 'public');
 
-            return back()->with('success', 'اواتار با موفقیت اپلود شد.');
+            return back()->with('success', 'اواتار با موفقیت آپلود شد.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return back()->with('error', 'خطا در آپلود اواتار: ' . $e->getMessage());
         }
     }
+
 
     public function gallery(Request $request, Product $product)
     {

@@ -25,7 +25,7 @@ class ProductController extends Controller
             $query->where('name', 'like', '%' . $request->q . '%');
             $query->orWhere('sku', 'like', '%' . $request->q . '%');
         }
-        $productList = $query->paginate(20);
+        $productList = $query->latestUpdated()->paginate(20);
         return Inertia::render('manager/product/index', [
             'productList' => new ProductCollection($productList),
         ]);

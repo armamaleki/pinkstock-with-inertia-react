@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\Image\Enums\Fit;
+use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class TrainingVideo extends Model
+class TrainingVideo extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
@@ -19,6 +20,9 @@ class TrainingVideo extends Model
         $this
             ->addMediaConversion('thumb')
             ->fit(Fit::Contain, 150, 150)
+            ->nonQueued();
+        $this->addMediaConversion('watermark')
+            ->watermark(public_path('assets/images/logo.png'))
             ->nonQueued();
     }
     public function getRouteKeyName()

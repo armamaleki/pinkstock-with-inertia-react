@@ -29,7 +29,7 @@ export default function Paginate({ meta }:PaginateProps) {
     if (!meta || !meta.links) return null;
     return (
         <Pagination>
-            <PaginationContent className="flex justify-center gap-1">
+            <PaginationContent className="flex flex-wrap justify-center gap-1">
                 {meta.links.map((link, index) => {
                     if (!link.url && !link.page) {
                         if (link.label.includes('...')) {

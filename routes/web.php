@@ -25,6 +25,11 @@ Route::prefix('store')->as('store.')->group(function () {
     Route::get('/{product}', [\App\Http\Controllers\Client\StoreController::class , 'show'])->name('show');
 });
 
+Route::prefix('training')->name('training.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\Client\TrainingVideoController::class, 'index'])->name('index');
+    Route::get('/{training}', [\App\Http\Controllers\Client\TrainingVideoController::class, 'show'])->name('show');
+});
+
 
 Route::get('/laptop-price-estimate', function () {
     return Inertia::render('laptop-price-estimate');

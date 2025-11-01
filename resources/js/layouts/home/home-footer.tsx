@@ -15,6 +15,7 @@ import article from '@/routes/article';
 import { aboutUs, contactUs, faq, laptopPriceEstimate, repairs } from '@/routes';
 import store from '@/routes/store';
 import productCategory from '@/routes/product-category';
+import training from '@/routes/training';
 
 export default function HomeFooter() {
     return (
@@ -83,7 +84,7 @@ export default function HomeFooter() {
                     </Link>
                     <Link
                         className={`flex gap-1 items-center`}
-                        href={`/training`}>
+                        href={training.index()}>
                         <Videotape className={`size-6`}/>
                         پینک آکادمی
                     </Link>

@@ -12,6 +12,8 @@ import {
     Store,
 } from 'lucide-react';
 import productCategory from '@/routes/product-category';
+import ProductCategory from '@/routes/product-category';
+import store from '@/routes/store';
 
 export default function () {
     const { auth } = usePage<SharedData>().props;
@@ -91,14 +93,14 @@ export default function () {
                 </Link>
                 <Link
                     className={`flex w-full flex-col items-center text-center text-[10px]`}
-                    href={'/product-category'}
+                    href={ProductCategory.index()}
                 >
                     <Grid2x2Plus className={`size-8`} />
                     <h3>دسته بندی ها</h3>
                 </Link>
                 <Link
                     className={`flex w-full flex-col items-center text-center text-[10px]`}
-                    href={'/store'}
+                    href={store.index()}
                 >
                     <Store className={`size-8`} />
                     <h3>فروشگاه</h3>

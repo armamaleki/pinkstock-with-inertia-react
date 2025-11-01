@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Client\Traning\ShowTraningResource;
 use App\Http\Resources\Client\Traning\TraningCollection;
 use App\Models\TrainingVideo;
 use Illuminate\Http\Request;
@@ -17,6 +18,16 @@ class TrainingVideoController extends Controller
             ->paginate(12);
         return Inertia::render('client/training/index', [
             'trainingLists' => new TraningCollection($trainings),
+        ]);
+    }
+
+    public function show(TrainingVideo $training)
+    {
+        if ($training->status !== 'active') {
+            abort(404);
+        }
+        return Inertia::render('client/training/show', [
+           'trainingItem' => new ShowTraningResource($training),
         ]);
     }
 }

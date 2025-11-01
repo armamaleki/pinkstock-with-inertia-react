@@ -3,7 +3,6 @@ import {
     Calculator,
     Contact,
     Grid2x2Plus,
-    MapPin,
     Newspaper, Phone,
     ReplaceAll,
     Store,

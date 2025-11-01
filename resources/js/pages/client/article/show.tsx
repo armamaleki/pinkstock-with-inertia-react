@@ -104,7 +104,7 @@ export default function Show({articleItem}) {
                             </div>
                         </div>
                         <div
-                            className={`editor text-justify`}
+                            className={`editor text-justify ckeditor-content`}
                             dangerouslySetInnerHTML={{
                                 __html: (articleItem.data?.description)
                                     .replace(/&zwnj;|&zwj;|&nbsp;|&shy;|&thinsp;|&ensp;|&emsp;|&hairsp;/g, " ")

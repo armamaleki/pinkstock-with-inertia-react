@@ -198,7 +198,7 @@ export default function ShowProduct({ productItem }) {
                 </div>
             </div>
             <div
-                className={`editor editor rounded-xl bg-gray-800 p-2 text-justify shadow-lg shadow-sky-400`}
+                className={`editor editor rounded-xl bg-gray-800 p-2 text-justify shadow-lg shadow-pink-400 ckeditor-content`}
                 dangerouslySetInnerHTML={{
                     __html: productItem.data.description
                         .replace(

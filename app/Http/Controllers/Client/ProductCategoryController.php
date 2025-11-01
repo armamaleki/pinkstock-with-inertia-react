@@ -23,14 +23,20 @@ class ProductCategoryController extends Controller
         if ($productCategory->status !== 'active') {
             abort(404);
         }
-        $productCategory->load([
-            'products' => function ($query) {
-                $query->where('status', 'active')->latest();
-            }
-        ]);
+        // ابتدا اطلاعات دسته‌بندی رو لود کن
+        $productCategory->load('user', 'media');
 
-        return Inertia::render('client/product-categories/show',[
+        // محصولات این دسته‌بندی با paginate
+        $products = $productCategory->products()
+            ->where('status', 'active')
+            ->latest()
+            ->paginate(12) // هر صفحه 12 محصول
+            ->withQueryString(); // برای حفظ پارامتر page در آدرس
+
+        return Inertia::render('client/product-categories/show', [
             'productCategoryItem' => new ShowProductCategoryResource($productCategory),
+            'products' => \App\Http\Resources\Client\Product\ProductResource::collection($products),
+            'links' => $products->linkCollection(), // لینک‌های صفحه‌بندی برای Vue/Inertia
         ]);
     }
 }

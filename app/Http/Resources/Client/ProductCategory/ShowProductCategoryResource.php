@@ -28,9 +28,9 @@ class ShowProductCategoryResource extends JsonResource
             'avatar' => $this->getMedia('avatars')->isNotEmpty()
                 ? $this->getMedia('avatars')->first()->getFullUrl('watermark')
                 : null,
-            'products' => ProductResource::collection(
-                $this->whenLoaded('products')
-            ),
+//            'products' => ProductResource::collection(
+//                $this->whenLoaded('products')
+//            ),
         ];
     }
 }

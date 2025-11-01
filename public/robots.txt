@@ -1,2 +1,10 @@
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /auth/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /storage/
+Allow: /
+
+Sitemap: https://pinkstock.net/sitemap.xml
+Sitemap: https://pinkstock.net/product-sitemap.xml

@@ -9,7 +9,7 @@ Route::get('/repairs', function () {
     return Inertia::render('repairs');
 })->name('repairs');
 
-Route::prefix('articles')->as('article.')->group(function () {
+Route::prefix('article')->as('article.')->group(function () {
     Route::get('/', [\App\Http\Controllers\Client\ArticleController::class , 'index'])->name('index');
     Route::get('/{article}', [\App\Http\Controllers\Client\ArticleController::class , 'show'])->name('show');
 });
@@ -60,3 +60,38 @@ Route::middleware(['auth', 'verified'])->group(function () {
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 require __DIR__.'/manager.php';
+
+Route::get('sitemap.xml', function () {
+
+    $articles = \App\Models\Article::where('status', 'active')->latest()->get();
+    $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset/>');
+    $xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    foreach ($articles as $article) {
+        $url = $xml->addChild('url');
+        $url->addChild('loc', url('/article/' . $article->slug));
+        $url->addChild('lastmod', \Carbon\Carbon::make($article->updated_at)->format('Y-m-d'));
+        $url->addChild('changefreq', 'weekly');
+        $url->addChild('priority', '0.9');
+
+    }
+    return response()->make($xml->asXML(), 200)->header('Content-Type', 'application/xml');
+
+})->name('sitemap');
+
+Route::get('product-sitemap.xml', function () {
+
+    $products = \App\Models\Product::where('status', 'active')->latest()->get();
+    $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><urlset/>');
+    $xml->addAttribute('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+    foreach ($products as $product) {
+        $url = $xml->addChild('url');
+        $url->addChild('loc', url('/store/' . $product->slug));
+        $url->addChild('lastmod', \Carbon\Carbon::make($product->updated_at)->format('Y-m-d'));
+        $url->addChild('changefreq', 'monthly');
+        $url->addChild('priority', '0.9');
+    }
+    return response()->make($xml->asXML(), 200)->header('Content-Type', 'application/xml');
+
+})->name('product.sitemap');
+
+

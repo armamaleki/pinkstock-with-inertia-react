@@ -98,8 +98,8 @@ export default function Index({productLists}) {
                         </Link>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
-                        {productLists.data.map((productitem , index)=>(
-                            <SingleProduct key={index} prodcutItem={productitem}/>
+                        {productLists.data.map((productItem , index)=>(
+                            <SingleProduct key={index} productItem={productItem}/>
                         ))}
                     </div>
                     <Paginate meta={productLists.meta}/>

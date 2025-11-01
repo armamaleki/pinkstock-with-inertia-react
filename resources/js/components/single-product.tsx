@@ -2,25 +2,25 @@ import { Link } from '@inertiajs/react';
 import { ShoppingCart } from 'lucide-react';
 import store from '@/routes/store';
 
-export default function SingleProduct({ prodcutItem }) {
+export default function SingleProduct({ productItem }) {
     return (
         <div className={'space-y-2'}>
             <div className="group flex flex-col items-center space-y-4 text-center">
                 <div className="relative overflow-hidden">
-                    <Link href={store.show(prodcutItem)}>
+                    <Link href={store.show(productItem)}>
                         <div className="overflow-hidden rounded-xl">
                             <img
-                                src={prodcutItem.avatar}
+                                src={productItem.avatar}
                                 alt=""
                                 className="transition delay-150 duration-300 ease-in-out group-hover:scale-125 group-hover:rotate-5 group-hover:skew-1 group-hover:grayscale"
                             />
                         </div>
                     </Link>
                     <div className="absolute bottom-5 left-5 rounded-md bg-gray-800 p-1">
-                        {prodcutItem.price ? (
+                        {productItem.price ? (
                             <div className="flex items-center gap-1">
                                 <span className="text-2xl">
-                                    {prodcutItem.price}
+                                    {productItem.price}
                                 </span>
                                 <svg
                                     className="size-6 stroke-2"
@@ -42,7 +42,7 @@ export default function SingleProduct({ prodcutItem }) {
 
                     <div className="absolute top-5 right-5 h-full">
                         <div className="flex flex-col items-center space-y-1">
-                            {prodcutItem.attributes.map((attribute, index) => (
+                            {productItem.attributes.map((attribute, index) => (
                                 <div key={index} className="bg-pink-400 rounded-full p-1 relative group">
                                     <div className="w-6 h-6 flex items-center justify-center">
                                         <span dangerouslySetInnerHTML={{ __html: attribute.icon || '' }} />
@@ -58,13 +58,13 @@ export default function SingleProduct({ prodcutItem }) {
                 </div>
             </div>
 
-            <Link href={store.show(prodcutItem)}>
+            <Link href={store.show(productItem)}>
                 <h2 className="text-2xl font-bold transition delay-150 duration-300 ease-in-out group-hover:text-pink-400">
-                    {prodcutItem.name}
+                    {productItem.name}
                 </h2>
             </Link>
             <Link
-                href={store.show(prodcutItem)}
+                href={store.show(productItem)}
                 className="flex w-fit gap-1 rounded-full bg-pink-400 p-2"
             >
                 <ShoppingCart />

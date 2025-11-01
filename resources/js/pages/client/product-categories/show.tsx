@@ -4,8 +4,9 @@ import { Head } from '@inertiajs/react';
 import HomeLayout from '@/layouts/home-layout';
 import productCategory from '@/routes/product-category';
 import SingleProduct from '@/components/single-product';
+import Paginate from '@/components/paginate';
 
-export default function({productCategoryItem}) {
+export default function({productCategoryItem, products}) {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'پینک استوک',
@@ -79,12 +80,18 @@ export default function({productCategoryItem}) {
                     content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
                 />
             </Head>
-
             <h1 className="font-bold">{productCategoryItem.data?.name}</h1>
             <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
-                {productCategoryItem.data.products.map((productitem , index)=>(
-                    <SingleProduct key={index} prodcutItem={productitem}/>
-                ))}
+                {products.data.length > 0 ? (
+                    products.data.map((produ, index) => (
+                        <SingleProduct key={index} productItem={produ} />
+                    ))
+                ) : (
+                    <p className="col-span-3 text-center text-gray-500">محصولی در این دسته وجود ندارد.</p>
+                )}
+            </div>
+            <div className="mt-8">
+                <Paginate meta={products.meta} />
             </div>
             <div
                 className={`editor text-justify`}

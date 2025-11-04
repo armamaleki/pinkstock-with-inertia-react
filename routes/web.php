@@ -47,20 +47,16 @@ Route::get('faq', function () {
    return Inertia::render('client/faq');
 })->name('faq');
 
+Route::get('privacy-policy', function () {
+   return Inertia::render('client/privacy');
+})->name('privacy-policy');
 
 
-
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
-});
-
-require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
-require __DIR__.'/manager.php';
+require __DIR__.'/dashboard.php';
+require __DIR__.'/settings.php';
 
+require __DIR__.'/manager.php';
 Route::get('sitemap.xml', function () {
 
     $articles = \App\Models\Article::where('status', 'active')->latest()->get();

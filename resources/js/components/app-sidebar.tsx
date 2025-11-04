@@ -10,7 +10,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { faq, privacyPolicy } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import {
@@ -24,16 +24,17 @@ import {
     ShieldQuestionIcon,
 } from 'lucide-react';
 import AppLogo from './app-logo';
+import dashboard from '@/routes/dashboard';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'حساب کاربری',
-        href: dashboard(),
+        href: dashboard.index(),
         icon: LayoutGrid,
     },
     {
         title: 'سفارشات',
-        href: '#',
+        href: dashboard.orders(),
         icon: ListOrdered,
     },
     {
@@ -48,7 +49,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'گزارش پرداختی',
-        href: '#',
+        href: dashboard.transactions(),
         icon: BanknoteIcon,
     },
 
@@ -63,12 +64,12 @@ const mainNavItems: NavItem[] = [
 const footerNavItems: NavItem[] = [
     {
         title: 'قوانین و مقررات',
-        href: '#',
+        href: privacyPolicy(),
         icon: ShieldAlert,
     },
     {
         title: 'سوالات متداول',
-        href: '#',
+        href: faq(),
         icon: ShieldQuestionIcon,
     },
 ];
@@ -83,7 +84,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href={dashboard.index()} prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>

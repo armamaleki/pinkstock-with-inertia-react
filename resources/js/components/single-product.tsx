@@ -36,7 +36,7 @@ export default function SingleProduct({ productItem }) {
                                 </svg>
                             </div>
                         ) : (
-                            <p className="text-pink-400">اتمام موجودی</p>
+                            <p className="text-pink-400">تماس بگیرید</p>
                         )}
                     </div>
 

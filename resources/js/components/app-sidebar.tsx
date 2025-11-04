@@ -13,33 +13,72 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import {
+    BanknoteIcon,
+    Bell,
+    LayoutGrid,
+    ListOrdered,
+    MapPin,
+    MessageCircleIcon,
+    ShieldAlert,
+    ShieldQuestionIcon,
+} from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'حساب کاربری',
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'سفارشات',
+        href: '#',
+        icon: ListOrdered,
+    },
+    {
+        title: 'نظرات و پرسش ها',
+        href: '#',
+        icon: MessageCircleIcon,
+    },
+    {
+        title: 'آدرس ها',
+        href: '#',
+        icon: MapPin,
+    },
+    {
+        title: 'گزارش پرداختی',
+        href: '#',
+        icon: BanknoteIcon,
+    },
+
+    {
+        title: 'پیام ها',
+        href: '#',
+        icon: Bell,
+    },
+
 ];
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'قوانین و مقررات',
+        href: '#',
+        icon: ShieldAlert,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'سوالات متداول',
+        href: '#',
+        icon: ShieldQuestionIcon,
     },
 ];
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar
+            side={'right'}
+            dir={'rtl'}
+            collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

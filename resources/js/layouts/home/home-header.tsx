@@ -1,7 +1,8 @@
 import SearchBox from '@/layouts/home/search-box';
-import { dashboard, laptopPriceEstimate, login, repairs } from '@/routes';
+import { laptopPriceEstimate, login, repairs } from '@/routes';
 import type { SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
+import dashboard from '@/routes/dashboard';
 import {
     Calculator,
     Grid2x2Plus,
@@ -64,7 +65,7 @@ export default function () {
                     <SearchBox />
                     {auth.user ? (
                         <Link
-                            href={dashboard()}
+                            href={dashboard.index()}
                             className="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                         >
                             حساب کاربری

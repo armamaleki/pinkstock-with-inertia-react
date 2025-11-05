@@ -1,0 +1,1 @@
+import{j as e,H as t}from"./app-DU7d5tre.js";import{A as s}from"./auth-layout-ZxeWAGC0.js";/* empty css            */import"./index-DDbkFlHG.js";import"./index-CMWG4mbA.js";function n({token:o,email:r}){return e.jsx(s,{title:"Reset password",description:"Please enter your new password below",children:e.jsx(t,{title:"Reset password"})})}export{n as default};

@@ -73,7 +73,7 @@ class AuthenticatedSessionController extends Controller
         $user = User::where('phone', $request->phone)->first();
         Auth::login($user);
         Cache::forget('otp_' . $request->phone);
-        return redirect()->route('dashboard')->with('success', 'با موفقیت وارد شدید');
+        return redirect()->route('dashboard.index')->with('success', 'با موفقیت وارد شدید');
     }
 
 

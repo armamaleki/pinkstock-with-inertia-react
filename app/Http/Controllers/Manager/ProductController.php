@@ -52,11 +52,10 @@ class ProductController extends Controller
                 if (is_null($item['name']) || is_null($item['value'])) {
                     return;
                 }
-                $attr = Attribute::firstOrCreate([
-                    'name' => $item['name'],
-                    'user_id' => auth()->id(),
-                ]);
-
+                $attr = Attribute::firstOrCreate(
+                    ['name' => $item['name']],
+                    ['user_id' => auth()->id()]
+                );
                 $attr_value = $attr->values()->firstOrCreate([
                     'value' => $item['value'],
                 ]);
@@ -100,10 +99,10 @@ class ProductController extends Controller
                 if (is_null($item['name']) || is_null($item['value'])) {
                     return;
                 }
-                $attr = Attribute::firstOrCreate([
-                    'name' => $item['name'],
-                    'user_id' => auth()->id(),
-                ]);
+                $attr = Attribute::firstOrCreate(
+                    ['name' => $item['name']],
+                    ['user_id' => auth()->id()]
+                );
                 $attr_value = $attr->values()->firstOrCreate([
                     'value' => $item['value'],
                 ]);

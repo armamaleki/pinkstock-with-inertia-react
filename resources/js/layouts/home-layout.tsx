@@ -13,10 +13,14 @@ interface HomeLayoutProps {
     breadcrumbs?: BreadcrumbItem[];
 }
 
-export default function HomeLayout({ children, breadcrumbs, ...props }: HomeLayoutProps) {
+export default function HomeLayout({
+    children,
+    breadcrumbs,
+    ...props
+}: HomeLayoutProps) {
     useEffect(() => {
         AOS.init();
-    }, [])
+    }, []);
     useEffect(() => {
         document.documentElement.lang = 'fa';
         document.documentElement.dir = 'rtl';
@@ -28,15 +32,27 @@ export default function HomeLayout({ children, breadcrumbs, ...props }: HomeLayo
     }, []);
 
     return (
-        <section className="container mx-auto space-y-4"{...props}>
+        <section className="container mx-auto space-y-4" {...props}>
+            <div
+                className={
+                    'fixed  top-4 right-2 z-50 rounded-md bg-red-400 animate-bounce p-2'
+                }
+            >
+                به دلیل به روز رسانی سایت فروش تنها از طریق تماس تلفنی صورت
+                میگیرد
+            </div>
             <Head>
-                <link rel="icon" type="image/png" href={'/assets/images/logo.png'} />
+                <link
+                    rel="icon"
+                    type="image/png"
+                    href={'/assets/images/logo.png'}
+                />
             </Head>
             <HomeHeader />
             <Breadcrumbs breadcrumbs={breadcrumbs} />
             {children}
-            <HomeFooter/>
-            <ContactAction/>
+            <HomeFooter />
+            <ContactAction />
         </section>
     );
 }

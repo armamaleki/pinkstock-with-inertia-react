@@ -22,5 +22,8 @@ Route::prefix('dashboard')->as('dashboard.')->middleware(['auth'])->group(functi
         ]);
     })->name('transactions');
 
+    Route::get('vendor-request' , [\App\Http\Controllers\Dashboard\VendorRequestController::class, 'index'])->name('vendor-request.index');
+    Route::get('vendor-request/request' , [\App\Http\Controllers\Dashboard\VendorRequestController::class, 'request'])->name('vendor-request.request');
+
 
 });

@@ -22,6 +22,7 @@ import {
     MessageCircleIcon,
     ShieldAlert,
     ShieldQuestionIcon,
+    Store,
 } from 'lucide-react';
 import AppLogo from './app-logo';
 import dashboard from '@/routes/dashboard';
@@ -62,6 +63,11 @@ const mainNavItems: NavItem[] = [
 ];
 
 const footerNavItems: NavItem[] = [
+    {
+        title: 'درخواست فروشنده شدن',
+        href: dashboard.vendorRequest.index(),
+        icon: Store,
+    },
     {
         title: 'قوانین و مقررات',
         href: privacyPolicy(),

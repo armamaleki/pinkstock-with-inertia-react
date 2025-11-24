@@ -7,18 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 class Vendor extends Model
 {
     protected $fillable = [
-        'national_id',
-        'shaba_number',
-        'card_number',
         'store_name',
-        'address',
-        'website',
-        'whatsapp',
+        'slug',
+        'about',
         'phone',
-        'in_person_buy',
-        'full_name',
+        'whatsapp',
         'email',
+        'website',
+        'address',
+        'city',
+        'state',
+        'postal_code',
+        'latitude',
+        'longitude',
+        'in_person_buy',
         'working_days',
         'shipping_methods',
+        'national_id',
+        'economic_code',
+        'user_id',
+        'is_active',
     ];
 }

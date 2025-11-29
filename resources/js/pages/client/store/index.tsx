@@ -89,7 +89,7 @@ export default function Index({ productLists }) {
                 />
             </Head>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-5 p-2">
                 <div className="hidden h-screen overflow-scroll rounded-xl border border-gray-400 bg-gray-800 p-3 shadow-lg shadow-sky-400 md:block">
                     <p className="mb-3 text-2xl font-bold">فیلتر ها</p>
                 </div>

@@ -27,7 +27,6 @@ export default function ShowProduct({ productItem }) {
         },
     ];
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
-    console.log(productItem);
     return (
         <HomeLayout breadcrumbs={breadcrumbs}>
             <Head>
@@ -170,15 +169,19 @@ export default function ShowProduct({ productItem }) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr className="border-b border-gray-300">
+                                {productItem.data.attributes.map((item , index)=>(
+                                    <tr
+                                        key={index}
+                                        className="border-b border-gray-300">
                                         <th
                                             scope="row"
-                                            className="border-l border-gray-300 px-6 py-4"
-                                        >
-                                            رنگ:
+                                            className="border-l border-gray-300 px-6 py-4">
+                                            {item.name}
                                         </th>
-                                        <td className="px-6 py-4">زرد</td>
+                                        <td className="px-6 py-4">{item?.value}</td>
                                     </tr>
+                                ))}
+
                                 </tbody>
                             </table>
                         </div>

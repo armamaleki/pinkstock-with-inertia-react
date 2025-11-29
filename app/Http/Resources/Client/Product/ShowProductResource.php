@@ -35,6 +35,15 @@ class ShowProductResource extends JsonResource
             'meta_description'=>$this->meta_description ?? null,
             'description'=>$this->description ?? null,
             'short_description'=>$this->short_description ?? null,
+            'attributes' => $this->attributes->map(function ($attribute) {
+                return [
+                    'id' => $attribute->id,
+                    'name' => $attribute->name,
+                    'value' => $attribute->values
+                        ->firstWhere('id', $attribute->pivot->value_id)
+                        ?->value,
+                ];
+            }),
         ];
     }
 }

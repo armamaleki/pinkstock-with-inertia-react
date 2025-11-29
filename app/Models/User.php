@@ -83,6 +83,10 @@ class User extends Authenticatable
         return $this->hasMany(Transaction::class);
     }
 
+    public function store()
+    {
+        return $this->hasOne(Vendor::class);
+    }
     public function scopeLatestUpdated($query)
     {
         return $query->orderBy('updated_at', 'desc');

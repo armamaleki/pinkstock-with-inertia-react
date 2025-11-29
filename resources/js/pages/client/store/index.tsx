@@ -2,9 +2,15 @@ import { Head, Link } from '@inertiajs/react';
 import HomeLayout from '@/layouts/home-layout';
 import type { BreadcrumbItem } from '@/types';
 import { home } from '@/routes';
-import { ArrowDown01, ArrowDownNarrowWide, ArrowUpNarrowWide } from 'lucide-react';
+import {
+    ArrowDown01,
+    ArrowDown10,
+    ArrowDownNarrowWide,
+    ArrowUpNarrowWide,
+} from 'lucide-react';
 import Paginate from '@/components/paginate';
 import SingleProduct from '@/components/single-product';
+import store from '@/routes/store';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -13,14 +19,17 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'فروشگاه پینک ',
-        href: "",
+        href: '',
     },
 ];
-export default function Index({productLists}) {
+export default function Index({ productLists }) {
     return (
         <HomeLayout breadcrumbs={breadcrumbs}>
             <Head>
-                <title>فروشگاه اینترنتی پینک | خرید آنلاین انواع کالا با بهترین قیمت</title>
+                <title>
+                    فروشگاه اینترنتی پینک | خرید آنلاین انواع کالا با بهترین
+                    قیمت
+                </title>
                 <meta
                     name="description"
                     content="فروشگاه اینترنتی پینک، جایی برای خرید مطمعن! از لوازم دیجیتال گرفته تا لوازم خانگی و زیبایی. خرید آنلاین با بهترین قیمت، ارسال سریع و پشتیبانی 7/24."
@@ -46,10 +55,16 @@ export default function Index({productLists}) {
                 <meta property="og:site_name" content="پینک" />
                 <meta property="og:locale" content="fa_IR" />
                 <meta property="og:type" content="website" />
-                <meta property="og:image" content="/assets/images/pink-store.png" />
+                <meta
+                    property="og:image"
+                    content="/assets/images/pink-store.png"
+                />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
-                <meta property="og:image:alt" content="فروشگاه اینترنتی پینک - خرید همه‌چیز در یک جا" />
+                <meta
+                    property="og:image:alt"
+                    content="فروشگاه اینترنتی پینک - خرید همه‌چیز در یک جا"
+                />
 
                 {/* Twitter */}
                 <meta name="twitter:card" content="summary_large_image" />
@@ -61,7 +76,10 @@ export default function Index({productLists}) {
                     name="twitter:description"
                     content="در پینک، از لوازم دیجیتال تا پوشاک و لوازم خانه، هر چی بخوای هست! با ارسال سریع، قیمت مناسب و پشتیبانی واقعی."
                 />
-                <meta name="twitter:image" content="/assets/images/pink-store.png" />
+                <meta
+                    name="twitter:image"
+                    content="/assets/images/pink-store.png"
+                />
 
                 {/* Robots */}
                 <meta name="robots" content="index, follow" />
@@ -71,38 +89,59 @@ export default function Index({productLists}) {
                 />
             </Head>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <div
-                    className="border hidden md:block border-gray-400 rounded-xl bg-gray-800 h-screen  overflow-scroll p-3 shadow-lg shadow-sky-400">
-                    <p className="text-2xl font-bold mb-3">
-                        فیلتر ها
-                    </p>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-4 lg:grid-cols-5">
+                <div className="hidden h-screen overflow-scroll rounded-xl border border-gray-400 bg-gray-800 p-3 shadow-lg shadow-sky-400 md:block">
+                    <p className="mb-3 text-2xl font-bold">فیلتر ها</p>
                 </div>
-                <div className="col-span-1 md:col-span-3 lg:col-span-4 space-y-4">
-                    <div className="border-y p-2  gap-1 items-center flex overflow-x-scroll">
+                <div className="col-span-1 space-y-4 md:col-span-3 lg:col-span-4">
+                    <div className="flex items-center gap-1 overflow-x-scroll border-y p-2">
                         <p className="hidden md:block">مرتب سازی بر اساس:</p>
-                        <Link href={'#'}
-                           className="flex text-nowrap gap-2 items-center  ">
-                            <ArrowDownNarrowWide/>
+                        <Link
+                            href={store.index()}
+                            data={{ sort: 'date-desc' }}
+                            className="flex items-center gap-2 text-nowrap"
+                        >
+                            <ArrowDownNarrowWide />
                             جدیدترین
                         </Link>
-                        <Link href="#"
-                           className="flex text-nowrap gap-2 items-center  ">
-                            <ArrowUpNarrowWide/>
+
+                        <Link
+                            href={store.index()}
+                            data={{ sort: 'date-asc' }}
+                            className="flex items-center gap-2 text-nowrap"
+                        >
+                            <ArrowUpNarrowWide />
+                            قدیمی‌ترین
+                        </Link>
+
+                        <Link
+                            href={store.index()}
+                            data={{ sort: 'price-desc' }}
+                            className="flex items-center gap-2 text-nowrap"
+                        >
+                            <ArrowDown10 />
                             بیشترین قیمت
                         </Link>
-                        <Link href="#"
-                           className="flex text-nowrap gap-2 items-center">
-                            <ArrowDown01/>
+
+                        <Link
+                            href={store.index()}
+                            data={{ sort: 'price-asc' }}
+                            className="flex items-center gap-2 text-nowrap"
+                        >
+                            <ArrowDown01 />
                             کمترین قیمت
                         </Link>
+
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3  gap-4">
-                        {productLists.data.map((productItem , index)=>(
-                            <SingleProduct key={index} productItem={productItem}/>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        {productLists.data.map((productItem, index) => (
+                            <SingleProduct
+                                key={index}
+                                productItem={productItem}
+                            />
                         ))}
                     </div>
-                    <Paginate meta={productLists.meta}/>
+                    <Paginate meta={productLists.meta} />
                 </div>
             </div>
         </HomeLayout>

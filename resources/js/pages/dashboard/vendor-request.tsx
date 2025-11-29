@@ -28,6 +28,7 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { FormEvent, useEffect, useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
+import vendorRequest from '@/routes/dashboard/vendor-request';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -40,7 +41,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ({ requestStatus }: any) {
+export default function ({ requestStatus , storeItem }: any) {
     const { props } = usePage();
     const { success, error } = props.flash || {};
     useEffect(() => {
@@ -52,25 +53,25 @@ export default function ({ requestStatus }: any) {
             toast.error(error);
         }
     }, [success, error]);
-    const { data, setData, post, processing, errors, reset, clearErrors } =
+    const { data, setData, patch, processing, errors, reset, clearErrors } =
         useForm({
-            store_name: '',
-            slug: '',
-            about: '',
-            phone: '',
-            whatsapp: '',
-            email: '',
-            website: '',
-            address: '',
-            city: '',
-            state: '',
-            postal_code: '',
-            latitude: '',
+            store_name: storeItem.store_name,
+            slug: storeItem?.slug,
+            about: storeItem?.about,
+            phone: storeItem?.phone,
+            whatsapp: storeItem?.whatsapp,
+            email: storeItem?.email,
+            website: storeItem?.website,
+            address: storeItem?.address,
+            city: storeItem?.city,
+            state: storeItem?.state,
+            postal_code: storeItem?.postal_code,
+            latitude: storeItem?.latitude,
             longitude: '',
             in_person_buy: '',
             working_days: '',
             shipping_methods: '',
-            national_id: '',
+            national_id: storeItem?.national_id,
             economic_code: '',
         });
 
@@ -91,11 +92,11 @@ export default function ({ requestStatus }: any) {
         if (name === 'city') error= validateCity(value);
         if (name === 'state') error= validateState(value);
         if (name === 'postal_code') error= validatePostalCode(value);
-        if (name === 'in_person_buy') error= validateInPersonBuy(value);
-        if (name === 'working_days') error= validateWorkingDays(value);
-        if (name === 'shipping_methods') error= validateShippingMethods(value);
+        // if (name === 'in_person_buy') error= validateInPersonBuy(value);
+        // if (name === 'working_days') error= validateWorkingDays(value);
+        // if (name === 'shipping_methods') error= validateShippingMethods(value);
         if (name === 'national_id') error= validateNationalId(value);
-        if (name === 'economic_code') error= validateEconomicCode(value);
+        // if (name === 'economic_code') error= validateEconomicCode(value);
 
         setLocalErrors((prev) => ({ ...prev, [name]: error }));
     };
@@ -116,21 +117,25 @@ export default function ({ requestStatus }: any) {
             city: validateCity(data.city),
             state: validateState(data.state),
             postal_code: validatePostalCode(data.postal_code),
-            in_person_buy: validateInPersonBuy(data.in_person_buy),
-            working_days: validateWorkingDays(data.working_days),
-            shipping_methods: validateShippingMethods(data.shipping_methods),
+            // in_person_buy: validateInPersonBuy(data.in_person_buy),
+            // working_days: validateWorkingDays(data.working_days),
+            // shipping_methods: validateShippingMethods(data.shipping_methods),
             national_id: validateNationalId(data.national_id),
-            economic_code: validateEconomicCode(data.economic_code),
+            // economic_code: validateEconomicCode(data.economic_code),
         };
         const hasError = Object.values(errors).some((err) => err !== null && err !== '');
-
+        console.log(errors);
         if (hasError) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-expect-error
             setLocalErrors(errors);
             return;
         }
-        console.log("Form submitted successfully");
+
+        patch(vendorRequest.update(), {
+            onSuccess: () => reset(),
+        });
+
     };
 
 
@@ -445,17 +450,28 @@ export default function ({ requestStatus }: any) {
                                     />
                                 </div>
                             </div>
+                            {/*<div className="grid grid-cols-1 items-center gap-2 md:grid-cols-4">*/}
+                            {/*    <Label htmlFor="national_id">*/}
+                            {/*        انتخاب لوکیشن*/}
+                            {/*    </Label>*/}
+                            {/*    <div className="col-span-1 md:col-span-3">*/}
 
-                            <Button className={'w-full'}>
-                                ثبت اطلاعات فروشگاه
+                            {/*    </div>*/}
+                            {/*</div>*/}
+
+                            <Button
+                                type="submit"
+                                className="relative w-full"
+                                disabled={processing}
+                            >
+                                {processing ? 'در حال ذخیره...' : 'ذخیره'}
                             </Button>
                         </form>
+                        {/*in_person_buy*/}
+                        {/*working_days*/}
+                        {/*shipping_methods*/}
 
-                        in_person_buy
-                        working_days
-                        shipping_methods
-
-                        economic_code
+                        {/*economic_code*/}
                     </CardContent>
                 </Card>
             )}

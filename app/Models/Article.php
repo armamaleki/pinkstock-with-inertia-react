@@ -10,6 +10,8 @@ use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class Article extends Model implements HasMedia
 {
@@ -60,7 +62,9 @@ class Article extends Model implements HasMedia
             if (!empty($productCategory->slug)) {
                 $productCategory->slug = Str::slug($productCategory->slug, '-', '');
             }
-
+        });
+        static::addGlobalScope('orderByUpdated', function (Builder $builder) {
+            $builder->orderBy('updated_at', 'desc');
         });
     }
 

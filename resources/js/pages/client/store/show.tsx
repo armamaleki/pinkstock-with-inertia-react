@@ -115,7 +115,7 @@ export default function ShowProduct({ productItem }) {
                     >
                         <SwiperSlide>
                             <img
-                                className={'w-full'}
+                                className={'w-full rounded-md'}
                                 src={productItem.data.avatar}
                             />
                         </SwiperSlide>
@@ -123,7 +123,7 @@ export default function ShowProduct({ productItem }) {
                             (gallery, index) => (
                                 <SwiperSlide key={index}>
                                     <img
-                                        className={'w-full'}
+                                        className={'w-full rounded-md'}
                                         src={gallery} />
                                 </SwiperSlide>
                             ),
@@ -140,12 +140,12 @@ export default function ShowProduct({ productItem }) {
                         className="mySwiper"
                     >
                         <SwiperSlide>
-                            <img src={productItem.data.avatar_thumb} />
+                            <img className={'rounded-md'} src={productItem.data.avatar_thumb} />
                         </SwiperSlide>
                         {productItem.data.galleries_thumb.map(
                             (gallery, index) => (
                                 <SwiperSlide key={index}>
-                                    <img src={gallery} />
+                                    <img className={'rounded-md'} src={gallery} />
                                 </SwiperSlide>
                             ),
                         )}

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -36,6 +37,9 @@ class Attribute extends Model
             if (auth()->check()) {
                 $attribute->user_id = auth()->id();
             }
+        });
+        static::addGlobalScope('orderByUpdated', function (Builder $builder) {
+            $builder->orderBy('updated_at', 'desc');
         });
     }
 

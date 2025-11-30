@@ -35,7 +35,7 @@ export default function HomeLayout({
         <section className="container mx-auto space-y-4" {...props}>
             <div
                 className={
-                    'fixed  top-4 right-2 z-50 rounded-md bg-red-400 animate-bounce p-2'
+                    'fixed  top-4 md:top-16 right-2 z-50 rounded-md bg-red-400 animate-bounce p-2'
                 }
             >
                 به دلیل به روز رسانی سایت فروش تنها از طریق تماس تلفنی صورت
